@@ -39,27 +39,30 @@ class Vlocc:
     ## previous_hash --> the hash of the current Vlocc;
     ## named as previous for relevance in later code
 
-	def __init__(self, title, author, index, time, attachment, previous_hash, data):
-		self.title = title
-		self.author = author
-		self.index = index
-		self.time = time
-		self.attachment = attachment
-		self.previous_hash = self.create_hash()
+    def __init__(self, title, author, index, time, attachment, previous_hash, data):
 
-	def create_hash(self):
-	## uses relevant info. of Vlocc to generate hash
-		new_hash = hasher.sha256(str(self.index) + self.author)
-		new_hash = new_hash.hexdigest
-		return new_hash
+        self.title = title
+        self.author = author
+        self.index = index
+        self.time = time
+        self.attachment = attachment
+        self.previous_hash = self.create_hash()
+        self.data = data
+
+    def create_hash(self):
+        # uses relevant info. of Vlocc to generate hash
+        new_hash = hasher.sha256((str(self.index) + self.author).encode('utf-8'))
+        new_hash = new_hash.hexdigest
+        return new_hash
 
 
 def create_genesis():
     ## creates the first instance of a Vlocc
     ## parameters are trivial, and index is 0.
 
-    first_stamp = date.datetime.now()
-    starter = Vlocc("first", "author_name", 0, first_stamp, "attachment", "0", "this_would_be_a_dictionary")
+    first_stamp = str(date.datetime.now())
+    starter = Vlocc("first", "author_name", 0, first_stamp, "attachment", 
+            "0", {'proof': 10, 'exchanges':[]})
     return starter
 
 def create_identity():
@@ -87,9 +90,7 @@ miner_address = "yeet" #temporary
 vlocchain.append(create_genesis())
 
 
-
-
-@node.route('/new', methods=['POST'])
+@node.route('/trans', methods=['POST'])
 def exchange_vid():
         """
         The output for when an exchange occurs
@@ -102,20 +103,26 @@ def exchange_vid():
         print("FILE:", (str(curr_exchange['fname'].encode('utf-8', 'replace'))))
         return "Exchange complete!"
 
-@node.route('/exchanges', methods=['GET'])
+@node.route('/ledger', methods=['GET'])
 def get_previous():
         """
         Gets all past exchanges to show on webpage
         """
         curr_chain = vlocchain
         everything = ""
-        for i in len(0, curr_chain):    #Puts all of the vloccs and their attributes in a string for printing on a webpage
+        for i in len(0, curr_chain):    #Puts all of the vloccs and their
+                #attributes in a string for printing on a webpage
                 vlocc = str(curr_chain[i])
                 vtitle = str(vlocc.title)
                 vauthor = str(vlocc.author)
                 vattachment = str(vlocc.attachment)
-                all = "Title: " + vtitle +  "   Author: " + vauthor + "   Attachment: " + vattachment + "\n"
-                everything += all
+                total = json.dumps({"Title" : vtitle ,  " Author" : vauthor,
+                    "Attachment": vattachment})
+                if everything == "":
+                    everything = total
+                else:
+                    everything+=total
+
         return everything       #All of the vloccs in a string
 
 def get_chains():
@@ -142,6 +149,21 @@ def consensus():
     #sets the vlocchain
     vlocchain = largest_chain
 
+
+
+def proof(previous_proof):
+    """
+    Temporary proof of work, to recieve vlocc
+    """
+    return 10
+
+
+def new_info():
+
+    return("title","author","attachment")
+
+
+
 @node.route('/mine', methods = ['GET'])
 def mine():
     """
@@ -149,25 +171,30 @@ def mine():
     """
     #grab the working variables
     previous_vlocc = vlocchain[-1]
-    previous_proof = previous_vlocc['proof']
+    previous_proof = previous_vlocc.data['proof']
     #next find the proof of concept
     new_proof = proof(previous_proof)
     
-    new_data = {'proof':new_proof,'exchanges':exchanges}
     #Get the variables for the new vlocc
-    exchange.append({"from":"Vlocc","to":miner_address,"ammount":1})
+    print(exchanges)
+    exchanges.append({"from":"Vlocc","to":miner_address,"ammount":1})
+    print(exchanges)
     new_index = previous_vlocc.index + 1
-    new_timestamp = date.datetime.now()
-    previous_hash = previous_vlocc.hash
+    new_data = {'proof':new_proof,'exchanges':exchanges}
+    new_time = str(date.datetime.now())
+    previous_hash = str(previous_vlocc.previous_hash)
     exchanges[:] = []
     #Get the pictures input from miner
     (new_title,new_author,new_attachment) = new_info()
     #new vlocc creation
     new_vlocc = Vlocc(new_title,new_author,new_index,new_time,
-        new_attachment,previous_hash,data)
+        new_attachment,previous_hash,new_data)
     vlocchain.append(new_vlocc)
     #Send information to the client
-    return(json.dumps({"title":new_title,"Author":new_Author,
-        "Time":new_time_stamp,"Previous Hash":previous_hash}))
+    return(json.dumps({"index":new_index,"title":new_title,"Author":new_author,
+        "Time":new_time,"Previous Hash":previous_hash}))
 
 node.run()
+
+
+
