@@ -1,17 +1,37 @@
 from user_class import *
 # from vlocc import *
+from flask import Flask
+import requests
+
+usernode = Flask(__name__)
+
 
 def send_to():
+	"""
+	Functionality for sending attachments for other (WIP)
+	"""
 	recieve = input("Please enter VlocC address of other user: ")
 	attachment = input("Please enter what you want to send: ")
 	User.send(recieve, attachment)
 
+def make_new_user():
+	"""
+	Pings website to create a new user
+	"""
+	ping = requests.get("localhost:5000/newuser")
+
 def main():
+	dic = {}
 	print("Welcome to VlocC!")
+	new_user = input("Are you a new user? (y/n): ")
+	if new_user == "y":
+		new_name = make_new_user()
+	user_name = input("Please enter username: ")
+	exchanges = dic[user_name]
 	contin = "y"
-	while contin == "y":
+	while contin == "y": # Loops until user inputs otherwise
 		while True:
-			# user_exchanges = User.get_transactions(exchanges)
+			user_exchanges = User.get_transactions(exchanges)
 			userinput = input("What would you like to do today? ('help' for all options) ")
 			if userinput == "help":
 				print("send, view, last, wallet")
