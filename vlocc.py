@@ -11,6 +11,7 @@ import requests
 import hashlib as hasher
 import datetime as date
 import random
+import user_class
 node = Flask(__name__)
 
 
@@ -88,7 +89,7 @@ vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
 miner_address = "yeet" #temporary
 vlocchain.append(create_genesis())
-
+users = {} #full user dictionary, id: obj
 
 @node.route('/trans', methods=['POST'])
 def exchange_vid():
@@ -193,5 +194,39 @@ def mine():
     #Send information to the client
     return(json.dumps({"index":new_index,"title":new_title,"Author":new_author,
         "Time":new_time,"Previous Hash":previous_hash}))
+
+
+
+"""
+/////////////////////////////|\\\\\\\\\\\\\\\\\\\\\\\\\\
+?????????????????????????CONTROLLER?????????????????????
+/////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\
+"""
+"""
+When this place gets pinged, make a new user and send the information
+out so the pinger can recieve it
+"""
+@node.route('/newuser', methods=['GET'])
+def make_new_user():
+    new_identity = create_identity()
+    while(new_identity in users == False):
+            new_identity = create_identity()
+    new_user = user_class.User(new_identity)
+    users[new_identity] = new_user
+    print(users)
+    return json.dumps({"Identity":str(new_identity)})
+
+    
+def user_exchange(address1,address2):
+    user1 = users[address1]
+    user2 = users[address2]
+    
+
+
+
+
+
+
+
 
 node.run()
