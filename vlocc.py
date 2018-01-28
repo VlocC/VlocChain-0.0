@@ -10,7 +10,74 @@ import json
 import requests
 import hashlib as hasher
 import datetime as date
+import random
 node = Flask(__name__)
+
+
+## This file holds some functions that will be called
+## throughout the code in the other files of this project.
+
+
+## The "Vlocc" class is important for storing all the
+## information that is used when making exchanges, or
+## logging data.
+class Vlocc:
+    ## title --> the name of the file shared,
+    ## assigned by the sender
+
+    ## author --> person sending the data to receiver
+
+    ## index --> the index of the instance of a Vlocc,
+    ## stored within itself
+
+    ## time --> timestamp of when the instance of the
+    ## Vlocc was created
+
+    ## attachment --> what the author sent; could be
+    ## a string, picture, video etc.
+
+    ## previous_hash --> the hash of the current Vlocc;
+    ## named as previous for relevance in later code
+
+	def __init__(self, title, author, index, time, attachment, previous_hash, data):
+		self.title = title
+		self.author = author
+		self.index = index
+		self.time = time
+		self.attachment = attachment
+		self.previous_hash = self.create_hash()
+
+	def create_hash(self):
+	## uses relevant info. of Vlocc to generate hash
+		new_hash = hasher.sha256(str(self.index) + self.author)
+		new_hash = new_hash.hexdigest
+		return new_hash
+
+
+def create_genesis():
+    ## creates the first instance of a Vlocc
+    ## parameters are trivial, and index is 0.
+
+    first_stamp = date.datetime.now()
+    starter = Vlocc("first", "author_name", 0, first_stamp, "attachment", "0", "this_would_be_a_dictionary")
+    return starter
+
+def create_identity():
+    ## creates an address which will be assigned to
+    ## a user upon function-call with a length of 10
+    ## using numbers and letters
+    identity = ""
+    for strLength in range(0, 10):
+        charType = random.randint(0, 3)
+        if (charType == 0):
+            ascii = random.randint(48, 57)
+        elif (charType == 1):
+            ascii = random.randint(65, 90)
+        else:
+            ascii = random.randint(97, 122)
+        identity += chr(ascii)
+    return identity
+
 
 
 nodes = [] #All known nodes get added here
@@ -18,6 +85,9 @@ vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
 miner_address = "yeet" #temporary
 vlocchain.append(create_genesis())
+
+
+
 
 @node.route('/new', methods=['POST'])
 def exchange_vid():
