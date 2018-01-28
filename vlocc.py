@@ -155,7 +155,7 @@ def mine():
     
     new_data = {'proof':new_proof,'exchanges':exchanges}
     #Get the variables for the new vlocc
-    exchange.append({"from":"Vlocc","to":miner_address,"ammount")
+    exchange.append({"from":"Vlocc","to":miner_address,"ammount":1})
     new_index = previous_vlocc.index + 1
     new_timestamp = date.datetime.now()
     previous_hash = previous_vlocc.hash
@@ -170,3 +170,4 @@ def mine():
     return(json.dumps({"title":new_title,"Author":new_Author,
         "Time":new_time_stamp,"Previous Hash":previous_hash}))
 
+node.run()
