@@ -76,14 +76,14 @@ class User():
 
 
 
-    def receive(self, sender, file, file_name, time):
+    def receive(self, sender, fd, file_name, time):
         time_mark = time
         ## if-else chain will need to be changed if
         ## more datatypes are implemented
-        if (isinstance(file, Image)):
-            self.write_image(self.file_path, file_name, file)
+        if (isinstance(fd, Image)):
+            self.write_image(self.file_path, file_name, fd)
         else:
-            print(file)
+            print(fd)
         self.wallet_size += 1
         self.numb_received += 1
 

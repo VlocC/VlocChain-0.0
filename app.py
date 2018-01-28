@@ -219,10 +219,22 @@ def make_new_user():
     return json.dumps({"Identity":str(new_identity)})
 
     
-def user_exchange(address1,address2):
+def user_exchange(address1,address2,name):
     user1 = users[address1]
     user2 = users[address2]
+    exchanges.append({"from":address1,"to":address2,"ammount":1) 
+    user1.send(user2,name)
+
+@node.route('/get')
+def get_transactions_parents():
+    # get the initial id
+    user_address = ______
+    user = users[user_address]
+    user_exchange = user.get_transactions(exchanges)
+    consensus()
     
+    # Return something
+
 
 @node.route('/verify', methods=['GET'])
 def verify_user():
@@ -232,6 +244,11 @@ def verify_user():
     result = user_name in users
     print("The result is", result)
     return json.dumps({'result':result})
+
+
+
+
+
 
 
 
