@@ -208,6 +208,8 @@ out so the pinger can recieve it
 """
 @node.route('/newuser', methods=['GET'])
 def make_new_user():
+    st = "yee yee yee"
+    print(st)
     new_identity = create_identity()
     while(new_identity in users == False):
             new_identity = create_identity()
@@ -222,10 +224,14 @@ def user_exchange(address1,address2):
     user2 = users[address2]
     
 
-@node.route('/verify', methods=['GET', 'POST'])
+@node.route('/verify', methods=['GET'])
 def verify_user():
+    print("In verify")
+    print(request.form)
     user_name = request.form['Username']
-    return json.dumps(user_name in users)
+    result = user_name in users
+    print("The result is", result)
+    return json.dumps({'result':result})
 
 
 

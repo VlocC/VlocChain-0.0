@@ -4,7 +4,7 @@ from flask import Flask
 import requests
 
 
-destination = "https://zccrzblqzc.localtunnel.me"
+destination = "https://insrjikbfl.localtunnel.me"
 
 
 
@@ -20,7 +20,10 @@ def make_new_user():
     """
     Pings website to create a new user
     """
-    ping = requests.get(destination+"/newuser")
+    print("recieving username")
+    data = {'key1':'val1'}
+    ping = requests.get(destination+"/newuser",params=data)
+
     print(ping.text)
     return ping.text
 
@@ -31,9 +34,12 @@ def main():
             new_name = make_new_user()
             print("Your Username/Address is", new_name)
     user_name = input("Please enter username: ")
-    
-    r = requests.put(destination+"/verify", data=({'Username':user_name})
+ 
+    r = requests.put(destination+"/verify", data=({'Username':user_name}))
+    print(r.headers)
+    print("Before get")
     r = requests.get(destination+"/verify")
+    print(r.headers)
 
     while(bool(r.text) == False):
         print("Invalid Username")
@@ -52,7 +58,8 @@ def main():
                     send_to()
             elif userinput == "view":
                 user_exchanges = requests.put(destination,data({'User-Exchanges':exchanges}))
-                for i in user_exchanges.headers['User-Exchanges']
+                for i in user_exchanges.headers['User-Exchanges']:
+                    pass
             elif userinput == "last":
                     print(user_exchanges[-1])
             elif userinput == "wallet":
