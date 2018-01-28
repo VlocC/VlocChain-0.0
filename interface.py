@@ -4,7 +4,7 @@ from flask import Flask
 import requests
 
 
-destination = "https://insrjikbfl.localtunnel.me"
+destination = "https://vfoplekjvh.localtunnel.me"
 
 
 
@@ -33,14 +33,11 @@ def main():
     if new_user == "y":
             new_name = make_new_user()
             print("Your Username/Address is", new_name)
-    user_name = input("Please enter username: ")
- 
-    r = requests.put(destination+"/verify", data=({'Username':user_name}))
-    print(r.headers)
+    user_name = input("Please enter username: ") 
+    r = requests.post(destination+"/verify", data=({'Username': user_name}))
     print("Before get")
-    r = requests.get(destination+"/verify")
-    print(r.headers)
-
+    # r = requests.get(destination+"/verify")
+    print(r.text)
     while(bool(r.text) == False):
         print("Invalid Username")
         user_name = input("Please enter username: ")

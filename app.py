@@ -220,30 +220,29 @@ def make_new_user():
 
     
 def user_exchange(address1,address2,name):
-    user1 = users[address1]
-    user2 = users[address2]
+    user1 = users[users.keys[0]]
+    user2 = users[users.keys[1]]
     exchanges.append({"from":address1,"to":address2,"ammount":1) 
     user1.send(user2,name)
 
 @node.route('/get')
 def get_transactions_parents():
     # get the initial id
-    user_address = ______
+    user_address = users[users.keys[0]].username
     user = users[user_address]
-    user_exchange = user.get_transactions(exchanges)
+    user_exchanges = user.get_transactions(exchanges)
     consensus()
     
-    # Return something
+    print(user_exchanges)
 
-
-@node.route('/verify', methods=['GET'])
+@node.route('/verify', methods=['POST', 'GET'])
 def verify_user():
     print("In verify")
-    print(request.form)
-    user_name = request.form['Username']
-    result = user_name in users
-    print("The result is", result)
-    return json.dumps({'result':result})
+    if request.method == 'POST':
+        user_name = request.form['Username']
+        result = user_name in users
+        print("The result is", result)
+        return json.dumps({'result': result})
 
 
 
