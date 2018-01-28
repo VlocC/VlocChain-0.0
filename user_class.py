@@ -1,11 +1,14 @@
+from __future__ import print_function
+from PIL import Image
 import time as timestamp
 import os
-from PIL import Image
-from __future__ import print_function
+
+
 class User():
-    def __init__(self, username, file_path):
+    def __init__(self, username, file_path, linux):
         self.username = username
         self.file_path = file_path
+        self.linux = linux
         numb_sent = 0
         numb_received = 0
         wallet_size = 3
@@ -35,15 +38,19 @@ class User():
             if (os.path.isfile(os.path.join(self.file_path, file))):
                 print(file)
 
-    def store_image(self, file_name):
-        path = self.file_path + "\\" + file_name
+    def load_image(self, file_name):
+        if (self.linux):
+            path = self.file_path + "/" + file_name
+        else:
+            path = self.file_path + "\\" + file_name
         uploaded_im = Image.open(path)
-        uploaded_im.load()
-        print(uploaded_im.format, uploaded_im.size, uploaded_im.mode)
+        return uploaded_im
 
-
-
-
+    def write_image(self, folder_path, image_name, img):
+        if (self.linux):
+            img.save(folder_path + "/" + image_name)
+        else:
+            img.save(folder_path + "\\" + image_name)
 
 
 
@@ -54,15 +61,13 @@ class User():
     def get_address(self):
         return self.username
 
-    def get_file_path(self):
-        return self.file_path
 
-    def send(self, receiver, vid):
+    def send(self, receiver, name):
         if (self.view_wallet() > 0):
-            message = vid.attachment
+            message = self.load_image(name)
             receiver_name = receiver.username
             transact_time = timestamp.timestamp.now()
-            receiver.receive(self, message, transact_time)
+            receiver.receive(self, message, name, transact_time)
             self.numb_sent += 1
             self.wallet_size -= 1
         else:
@@ -71,11 +76,20 @@ class User():
 
 
 
-    def receive(self, sender, vid, time):
-        message = vid.attachment
+    def receive(self, sender, file, file_name, time):
         time_mark = time
+        ## if-else chain will need to be changed if
+        ## more datatypes are implemented
+        if (isinstance(file, Image)):
+            self.write_image(self.file_path, file_name, file)
+        else:
+            print(file)
         self.wallet_size += 1
         self.numb_received += 1
 
 
 
+##new_user = User("test_name", "C:\\Users\\Curt\\AppData\\Local\\Programs\\Python\\Python36-32\\image_folder", False)
+##new_user.view_local_files()
+##temp_image = new_user.load_image("33333.png")
+##new_user.write_image("C:\\Users\\Curt\\AppData\\Local\\Programs\\Python\\Python36-32\\image_folder", "gimmedatmoney.png", temp_image)
