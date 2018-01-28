@@ -1,7 +1,7 @@
 """
 VlocChain
 Authors: Owen Sullivan, Joe DeGrand, Carter Nesbitt
-Filename: vlocc.py
+Filename: app.py
 """
 
 from flask import Flask
@@ -222,8 +222,10 @@ def user_exchange(address1,address2):
     user2 = users[address2]
     
 
-
-
+@node.route('/verify', methods=['GET', 'POST'])
+def verify_user():
+    user_name = request.form['Username']
+    return json.dumps(user_name in users)
 
 
 
