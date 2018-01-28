@@ -110,9 +110,9 @@ def get_previous():
         """
         curr_chain = vlocchain
         everything = ""
-        for i in len(0, curr_chain):    #Puts all of the vloccs and their
+        for i in range(0, len(curr_chain)):    #Puts all of the vloccs and their
                 #attributes in a string for printing on a webpage
-                vlocc = str(curr_chain[i])
+                vlocc = curr_chain[i]
                 vtitle = str(vlocc.title)
                 vauthor = str(vlocc.author)
                 vattachment = str(vlocc.attachment)
@@ -195,6 +195,3 @@ def mine():
         "Time":new_time,"Previous Hash":previous_hash}))
 
 node.run()
-
-
-
