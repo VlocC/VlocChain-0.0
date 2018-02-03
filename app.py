@@ -99,9 +99,12 @@ def exchange_vid():
         
         curr_exchange = request.get_json()
         exchanges.append(curr_exchange)
+        print("Test below this")
         user1 = users[curr_exchange['sender']]
         user2 = users[curr_exchange['reciever']]
-        user1.send(user2,curr_exchange['fname'])
+        print(curr_exchange['fname'])
+        print(type(curr_exchange['fname']))
+        user2.set_message(curr_exchange['fname'])
         print(exchanges[-1])
         print("New Video Exchange!")    #Prints out the new exchange in the terminal
         print("TITLE:", (str(curr_exchange['sender'].encode('utf-8', 'replace'))))
@@ -243,13 +246,21 @@ def verify_user():
         print("The result is", result)
         return json.dumps(result)
 
+@node.route('/print', methods=['POST'])
+def print_message():
+    print("START OF PRINT MESSAGE")
+
+    r = request.get_json()
+
+    print("I AM RIGHT HERRRRRRRRRRRRRRRRRRRREEEEEE")
+    print(type(r))
+    print(r)
+    user = users[r['username']]
+
+    return user.message
 
 
 
 
 
-
-
-
-
-node.run()
+node.run(debug = True)

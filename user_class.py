@@ -3,6 +3,9 @@ from PIL import Image
 import time as timestamp
 import os
 
+#Testing variable, if it sent
+message = ""
+
 
 class User():
     def __init__(self, username, file_path, linux):
@@ -12,6 +15,10 @@ class User():
         numb_sent = 0
         numb_received = 0
         wallet_size = 3
+
+    def set_message(self,msg):
+        self.message = msg
+
 
     def get_transactions(self, total_exchanges):
         curated_list = []
