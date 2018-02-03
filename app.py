@@ -96,12 +96,18 @@ def exchange_vid():
         """
         The output for when an exchange occurs
         """
+        
         curr_exchange = request.get_json()
         exchanges.append(curr_exchange)
+        user1 = users[curr_exchange['sender']]
+        user2 = users[curr_exchange['reciever']]
+        user1.send(user2,curr_exchange['fname'])
+        print(exchanges[-1])
         print("New Video Exchange!")    #Prints out the new exchange in the terminal
-        print("TITLE:", (str(curr_exchange['title'].encode('utf-8', 'replace'))))
-        print("AUTHOR:", (str(curr_exchange['author'].encode('utf-8', 'replace'))))
+        print("TITLE:", (str(curr_exchange['sender'].encode('utf-8', 'replace'))))
+        print("AUTHOR:", (str(curr_exchange['reciever'].encode('utf-8', 'replace'))))
         print("FILE:", (str(curr_exchange['fname'].encode('utf-8', 'replace'))))
+
         return "Exchange complete!"
 
 @node.route('/ledger', methods=['GET'])
@@ -154,13 +160,13 @@ def consensus():
 
 def proof(previous_proof):
     """
-    Temporary proof of work, to recieve vlocc
+    Getting X ammount of upvotes, and you will get your blocky boy
     """
     return 10
 
 
 def new_info():
-
+    # We will get this information when the VlocCoin is mined
     return("title","author","attachment")
 
 
@@ -208,24 +214,17 @@ out so the pinger can recieve it
 """
 @node.route('/newuser', methods=['GET'])
 def make_new_user():
-    st = "yee yee yee"
-    print(st)
+
     new_identity = create_identity()
     while(new_identity in users == False):
             new_identity = create_identity()
     new_user = user_class.User(new_identity, "null", True)
+    #Adds new user ID to our user list
     users[new_identity] = new_user
     print(users)
     return json.dumps({"Identity":str(new_identity)})
 
-    
-def user_exchange(address1,address2,name):
-    user1 = users[users.keys[0]]
-    user2 = users[users.keys[1]]
-    exchanges.append({"from":address1,"to":address2,"ammount":1}) 
-    user1.send(user2,name)
-
-@node.route('/get')
+@node.route('/send')
 def get_transactions_parents():
     # get the initial id
     user_address = users[users.keys[0]].username
@@ -242,7 +241,7 @@ def verify_user():
         user_name = request.form['Username']
         result = user_name in users
         print("The result is", result)
-        return json.dumps({'result': result})
+        return json.dumps(result)
 
 
 
