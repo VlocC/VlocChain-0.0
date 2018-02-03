@@ -62,12 +62,16 @@ class User():
         return self.username
 
 
-    def send(self, receiver, name):
+    def send(self, receiver, message_name):
         if (self.view_wallet() > 0):
-            message = self.load_image(name)
+            response = input("Is your message a text, or an image? t/i")
+            if (response == "t" or response == "T"):
+                message = message_name
+            else:
+                message = self.loadImage(message_name)
             receiver_name = receiver.username
             transact_time = timestamp.timestamp.now()
-            receiver.receive(self, message, name, transact_time)
+            receiver.receive(self, message, message_name, transact_time)
             self.numb_sent += 1
             self.wallet_size -= 1
         else:
@@ -86,10 +90,3 @@ class User():
             print(fd)
         self.wallet_size += 1
         self.numb_received += 1
-
-
-
-##new_user = User("test_name", "C:\\Users\\Curt\\AppData\\Local\\Programs\\Python\\Python36-32\\image_folder", False)
-##new_user.view_local_files()
-##temp_image = new_user.load_image("33333.png")
-##new_user.write_image("C:\\Users\\Curt\\AppData\\Local\\Programs\\Python\\Python36-32\\image_folder", "gimmedatmoney.png", temp_image)
