@@ -4,7 +4,7 @@ from flask import Flask
 import requests
 
 
-destination = "https://vfoplekjvh.localtunnel.me"
+destination = input("Destination: ")
 
 
 
@@ -33,14 +33,14 @@ def main():
     if new_user == "y":
             new_name = make_new_user()
             print("Your Username/Address is", new_name)
-    user_name = input("Please enter username: ") 
+    user_name = input("Please enter username: ")
+    print("Verify") 
     r = requests.post(destination+"/verify", data=({'Username': user_name}))
-    print("Before get")
-    # r = requests.get(destination+"/verify")
     print(r.text)
-    while(bool(r.text) == False):
+    while(r.text == False):
         print("Invalid Username")
         user_name = input("Please enter username: ")
+        r = requests.post(destination+"/verify", data=({'Username': user_name})) 
     print("Username accepted!")
 
     contin = "y"
@@ -48,7 +48,7 @@ def main():
             while True:
                     userinput = input("What would you like to do today? ('help' for all options) ")
                     if userinput == "help":
-                            print("send, view, last, wallet")
+                            print("send, view, last, wallet,exchange")
                     else:
                             break
             if userinput == "send":
@@ -59,6 +59,12 @@ def main():
                     pass
             elif userinput == "last":
                     print(user_exchanges[-1])
+
+            elif userinput == "exchanges":
+                    reciever_address = input("Input sender Address")
+                    st = input("Input message")
+                    req = requests.post(destination+"/trans", data({'sender':user_name,
+                            'reciever':reciever_address,'fname':st}))
             elif userinput == "wallet":
                     print(User.view_wallet())
             contin = input("Would you like to continue? (y/n): ") 
