@@ -5,13 +5,14 @@ Filename: app.py
 """
 
 from flask import Flask
-from flask import request
+from flask import request, session, render_template, redirect, flash
 import json
 import requests
 import hashlib as hasher
 import datetime as date
 import random
 import user_class
+import os
 node = Flask(__name__)
 
 
@@ -259,8 +260,26 @@ def print_message():
 
     return user.message
 
+@node.route('/', methods=['GET'])
+def home():
+	if not session.get('logged'):
+		return render_template('login.html')
+	else:
+		return "Welcome!"
 
+@node.route('/login', methods=['POST'])
+def check_user():
+	if request.method == "POST":
+		usern = request.form['username']
+		pwd = request.form['password']
+		if usern in users:
+			session['logged'] = True
+		else:
+			# return "YEET"
+			flash("Wrong password!")
+			session['logged'] = False
+		return home()
 
-
-
-node.run(debug = True)
+if __name__ == "__main__":
+	node.secret_key = os.urandom(15)
+	node.run(debug = True)
