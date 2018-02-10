@@ -11,7 +11,7 @@ import socket
 HOST = "127.0.0.1"
 PORT = 50007
 
-socket.socket()
+s = socket.socket()
 s.connect((HOST,PORT))
 def main():
 
@@ -19,10 +19,10 @@ def main():
     response = input("Please enter 'new' if you are a new user")
     username = ""
     #If they need to create a new user
-    if(response == "new" || response == "New"):
+    if(response == "new" or response == "New"):
         #Send keyword "new" and recieve username back
-        s.send(encode("new"))
-        username = s.recv(1024)
+        s.send(str.encode("new"))
+        username = s.recv(1024).decode("utf-8")
         print("Your username is: ", response)   
         
     #If they have an acccount
@@ -31,25 +31,22 @@ def main():
         while(True):
 
             username = input("Enter your username")
-            #Send the keyword "user" to the server
-            s.send(encode("user"))
             #send the users username now
-            s.send(encode(response))
+            s.send(str.encode(response))
             #Recieve the response True or False, if it exists
-            response = s.recv(1024)
+            response = s.recv(1024).decode("utf-8")
             
-            if(response = True): break
+            if(response == "True"): break
 
     # At this point, the user should either have a new username or be verified
     while(True):
-        direction = input("Input your desired actions (type one of the following):\n
-            transaction, view, exit")
+        direction = input("Input your desired actions (type one of the following):transaction, view, exit")
         if(direction == "exit"):
-            s.send(encode("exit"))
+            s.send(str.encode("exit"))
             break
-        else if(direction == "view"):
+        elif(direction == "view"):
             view(username)
-        else if(direction == "transaction"):
+        elif(direction == "transaction"):
             transaction(username)
 
     #After all actions are completed
@@ -71,13 +68,14 @@ def transaction(username):
     #get and send the recievers name to verify
     while(True):
         reciever = input("Enter the recievers address")
-        s.send(encode(reciever))
+        s.send(str.encode(reciever))
         #check if it is verified
-        response = s.recv(1024)
-        if(response == True): break;
+        response = s.recv(1024).decode("utf-8")
+        if(response == "True"): break;
     
     #Both users verified, chose the file to send
     filename = input("input a file to send")
+    s.send(str.encode(filename))
     filename = open(filename,'rb')
     #take info from file
     info = filename.read(1024)
@@ -89,6 +87,9 @@ def transaction(username):
 
     print("Transaction Completed")
     filename.close()
-    
-        
+
+main()
+
+
+
 
