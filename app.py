@@ -279,7 +279,38 @@ def check_user():
 			flash("Wrong password!")
 			session['logged'] = False
 		return home()
+@node.route('/sendvideo', methods=['GET'])
+def sendvids():
+	return render_template('sendvideo.html')
 
+@node.route('/send', methods=['POST', 'GET'])
+def player():
+	if request.method == "POST":
+		usernew = request.form['username']
+		video = request.form['video']
+		print(video)
+		if usernew in users:
+			#socket
+			return "It Worked!"
+		else:
+			render_template("sendvideo.html")
+@node.route('/register', methods=['POST', 'GET'])
+def render():
+	return render_template('register.html'
+)
+@node.route('/sendregister', methods=['POST', 'GET'])
+def send_register():
+	if request.method == "POST":
+		userr = request.form['username']
+		pwd = request.form['password']
+		rpwd = request.form['confirm_password']
+		if (pwd == "") or (pwd != rpwd):
+			return render_template('register.html')
+		if userr in users:
+			return render_template('register.html')
+		else:
+			users[userr] = pwd
+			return "Success"
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
 	node.run(debug = True)
