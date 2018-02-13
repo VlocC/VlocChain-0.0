@@ -24,8 +24,7 @@ nodes = [] #All known nodes get added here
 vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
 miner_address = "yeet" #temporary
-vlocchain.append(create_genesis())
-users = {} #full user dictionary, usernames
+users = {"admin", "pass"} #full user dictionary, usernames
 
 """
 When this place gets pinged, make a new user and send the information
@@ -43,11 +42,6 @@ def index():
 
 @node.route('/login', methods=['POST'])
 def check_user():
-    username = request.form.get("username")
-    pword = request.form.get("password")
-    conf_pword = request.form.get("confirm_password")
-    if (pword == conf_pword):
-        users[username] = pword
     if request.method == "POST":
         usern = request.form['username']
         pwd = request.form['password']
@@ -99,7 +93,7 @@ def send_register():
 			return render_template('register.html')
 		else:
 			users[userr] = pwd
-			return "Success"
+			return render_template("login.html")
 
 
 
@@ -138,11 +132,11 @@ def own_videos():
 
 @node.route('/search', methods=['POST'])
 def search():
-    return render_template('search.html')
+    search_string = request.form['search']
+    return render_template('search.html', search_string=search_string)
 
 
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
 	node.run(debug = True)
-
 
