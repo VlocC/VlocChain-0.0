@@ -11,6 +11,7 @@ nodes and send the files over and information over.
 import socket
 
 connections = []
+users = {"sender":4,"reciever":3}
 
 """
 Vlocc Objects, consisting of:
@@ -50,13 +51,32 @@ def main():
     """
     Where all of the functions will be called
     """
-    pass
+
+    s = socket.socket()
+
+    host = ''
+    port = 50007
+
+    s.bind((host,port))
+    s.listen(5)
+    while(True):
+        c,addr = s.accept()
+        command = c.recv(1024).decode("utf-8")
+        if command == "Exchange":
+            sender = c.recv(1024).decode("utf-8")
+            reciever = c.recv(1024).decode("utf-8")
+            if sender in users and reciever in users:
+                print("Success")
+            else:
+                print("Fail")
+
+            
 
         
         
 
 
-
+main()
 
 
 
