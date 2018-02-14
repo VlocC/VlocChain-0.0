@@ -5,7 +5,7 @@ Filename: app.py
 """
 
 from flask import Flask
-from flask import request, session, render_template, redirect, flash
+from flask import request, session, render_template, redirect, flash, url_for
 from lxml import html
 import json
 import requests
@@ -24,7 +24,8 @@ nodes = [] #All known nodes get added here
 vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
 miner_address = "yeet" #temporary
-users = {"admin", "pass"} #full user dictionary, usernames
+users = {} #full user dictionary, usernames
+#weblink = "https://127.0.0.1:5000/" #The main webwage of the website
 
 """
 When this place gets pinged, make a new user and send the information
@@ -32,40 +33,48 @@ out so the pinger can recieve it
 """
 
 
+"""
+The home page of the website. If the user isn't logged in yet, it will bring them to the login page. Otherwise, the hub page will be rendered.
+"""
 @node.route('/', methods=['GET', 'POST'])
 def index():
-	if not session.get('logged'):
+	if not session.get('logged'): #If the user is not logged in
 		return render_template('login.html')
-	else:
+	else: #If the user is logged in
 		return render_template('hub.html')
 
 
+"""
+The form from "login.html", sent when the user clicks the "submit" button
+"""
 @node.route('/login', methods=['POST'])
 def check_user():
     if request.method == "POST":
         usern = request.form['username']
         pwd = request.form['password']
-        if usern in users:
-            session['logged'] = True
+        if usern in users: #If the user exists
+            session['logged'] = True #Mark the user as "logged in"
         else:
-            # return "YEET"
             flash("Wrong password!")
-            session['logged'] = False
-        return index()
+            session['logged'] = False #Marks the user as "not logged in"
+        return index() #Reloads the page with 'logged' marked as either "True" or "False"
 
 
 
+"""
+The webpage where videos can be exchanged between users
+"""
 @node.route('/sendvideo', methods=['GET'])
 def sendvids():
-	return render_template('sendvideo.html')
+	return render_template('sendvideo.html') #Renders the send video page
 
 
 
 @node.route('/send', methods=['POST', 'GET'])
 def player():
 	if request.method == "POST":
-		usernew = request.form['username']
-		video = request.form['video']
+		usernew = request.form['username'] #Gets the username part of the form
+		video = request.form['video'] #Gets the password part of the form
 		print(video)
 		if usernew in users:
 			#socket
@@ -75,27 +84,33 @@ def player():
 
 
 
+"""
+The place where a new user can be created
+"""
 @node.route('/register', methods=['POST', 'GET'])
 def render():
 	return render_template('register.html')
 
 
 
+"""
+The form on the "register.html" page, that sends what the user typed in for username, password, and confirm password. If the username is already taken, or their passwords don't match, it will just refresh the page. Otherwise, their information will be added to the the dictionary "users".
+"""
 @node.route('/sendregister', methods=['POST', 'GET'])
 def send_register():
-	if request.method == "POST":
-		userr = request.form['username']
-		pwd = request.form['password']
-		rpwd = request.form['confirm_password']
-		if (pwd == "") or (pwd != rpwd):
-			return render_template('register.html')
-		if userr in users:
-			return render_template('register.html')
-		else:
-			users[userr] = pwd
-			return render_template("login.html")
-
-
+    if request.method == "POST":
+        userr = request.form['username']
+        pwd = request.form['password']
+        rpwd = request.form['confirm_password']
+        if (pwd == "") or (pwd != rpwd):
+            return render_template('register.html')
+        if userr in users:
+            return render_template('register.html')
+        else:
+            users[userr] = pwd
+            #return redirect(url_for('/'), code=302)
+            return render_template("login.html")
+            #check_user()
 
 @node.route('/logout', methods=['POST'])
 def logout():
