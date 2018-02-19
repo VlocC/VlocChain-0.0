@@ -25,6 +25,7 @@ vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
 miner_address = "yeet" #temporary
 users = {} #full user dictionary, usernames
+users["admin"] = "pass" 
 #weblink = "https://127.0.0.1:5000/" #The main webwage of the website
 
 """
@@ -53,7 +54,9 @@ def check_user():
         usern = request.form['username']
         pwd = request.form['password']
         if usern in users: #If the user exists
-            session['logged'] = True #Mark the user as "logged in"
+            if (users[usern] == pwd):
+                session['logged'] = True #Mark the user as "logged in"
+                session['username'] = usern
         else:
             flash("Wrong password!")
             session['logged'] = False #Marks the user as "not logged in"
@@ -102,7 +105,8 @@ def send_register():
         userr = request.form['username']
         pwd = request.form['password']
         rpwd = request.form['confirm_password']
-        if (pwd == "") or (pwd != rpwd):
+        mail_address = request.form['email']
+        if (pwd == "") or (pwd != rpwd) or (mail_address == ""):
             return render_template('register.html')
         if userr in users:
             return render_template('register.html')
@@ -112,44 +116,72 @@ def send_register():
             return render_template("login.html")
             #check_user()
 
+"""Returns user to login page after logging out of an account"""
 @node.route('/logout', methods=['POST'])
 def logout():
     session['logged'] = False
+    session['username'] = None
     return render_template('login.html')
 
-"""These upcoming functions don't have any practical use at the moment,
-   but may be useful in the near future"""
 
-
+"""Home page for a user"""
 @node.route('/hub', methods=['POST'])
 def home():
-    if request.method == "POST":
-        """nothing to do here yet, more to come soon"""
+    """nothing"""
 
-
+"""Page for account settings and status"""
 @node.route('/my-account', methods=['POST'])
 def account():
     return render_template('my-account.html')
-    """nothing to do here yet, more to come soon"""
+
+@node.route('/change-password', methods=['GET'])
+def change_password():
+    return render_template('change-password.html')
 
 
+"""Form that checks the credentials to change the password of an existing user"""
+@node.route('/send-new-pass', methods=['GET', 'POST'])
+def send_new_pass():
+    user_conf = request.form.get('conf_user')
+    password_conf = request.form.get('conf_pass')
+    new_password = request.form.get('new_pass')
+    confirm_new = request.form.get('conf_new_pass')
+    if user_conf in users:
+        if users[user_conf] == password_conf: #makes sure password is correct
+            if new_password == confirm_new: #confirms new password
+                users[user_conf] = new_password #changes password
+                session['logged'] = False
+                session['username'] = None
+                return render_template('login.html')
+    #if anything is not correct, bring user back to change password page
+    return render_template('change-password.html')
+
+"""Page that displays popular videos of entire site"""
 @node.route('/popular-videos', methods=['POST'])
 def popular():
     return render_template('popular-videos.html')
-    """nothing to do here yet, more to come soon"""
 
 
+"""Page that displays videos created/owned by signed in user"""
 @node.route('/my-videos', methods=['POST'])
 def own_videos():
     return render_template('my-videos.html')
-    """nothing to do here yet, more to come soon"""
 
 
+"""Page that shows results for search bar"""
 @node.route('/search', methods=['POST'])
 def search():
     search_string = request.form['search']
     return render_template('search.html', search_string=search_string)
 
+"""Form that deletes a given account"""
+@node.route('/delete-account', methods=['GET'])
+def delete_account():
+    del_user = session['username']
+    session['logged'] = False
+    del users[session['username']] ## remove user from user list
+    session['username'] = None
+    return render_template('login.html')
 
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
