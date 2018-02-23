@@ -9,6 +9,7 @@ nodes and send the files over and information over.
 """
 
 import socket
+import os
 
 connections = []
 users = {"sender":4,"reciever":3}
@@ -59,7 +60,28 @@ def main():
 
     s.bind((host,port))
     s.listen(5)
+    # Right now, Temporarily
+    # Just check for files and send them
     while(True):
+        c,addr = s.accept()
+        command = c.recv(1024).decode("utf-8")
+        if command == "download":
+            for fd in os.listdir("./newVideos"):
+                c.send(str.encode(fd))
+                fd_cur = open("./newVideos/"+fd,'rb')
+                info = fd_cur.read(1024)
+                while(info):
+                    print("sending")
+                    c.send(info)
+                    info = fd_cur.read(1024)
+                print("completed")
+                fd_cur.close()
+                os.remove("./newVideos/"+fd)
+                c.close()
+                        
+
+
+        """
         c,addr = s.accept()
         command = c.recv(1024).decode("utf-8")
         if command == "Exchange":
@@ -69,12 +91,10 @@ def main():
                 print("Success")
             else:
                 print("Fail")
+        """
+        
 
             
-
-        
-        
-
 
 main()
 
