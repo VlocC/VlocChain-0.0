@@ -8,10 +8,10 @@ message = ""
 
 
 class User():
-    def __init__(self, username, file_path, linux):
+    def __init__(self, username, file_path, email_address):
         self.username = username
         self.file_path = file_path
-        self.linux = linux
+        self.email_address = email_address
         numb_sent = 0
         numb_received = 0
         wallet_size = 3

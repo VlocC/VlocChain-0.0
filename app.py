@@ -25,7 +25,8 @@ vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
 miner_address = "yeet" #temporary
 users = {} #full user dictionary, usernames
-users["admin"] = "pass" 
+admin = user_class.User("admin", "", "")
+users[admin] = "pass"  
 #weblink = "https://127.0.0.1:5000/" #The main webwage of the website
 
 """
@@ -51,17 +52,17 @@ The form from "login.html", sent when the user clicks the "submit" button
 @node.route('/login', methods=['POST'])
 def check_user():
     if request.method == "POST":
+        session['logged'] = False
         usern = request.form['username']
         pwd = request.form['password']
-        if usern in users: #If the user exists
-            if (users[usern] == pwd):
-                session['logged'] = True #Mark the user as "logged in"
-                session['username'] = usern
-        else:
-            flash("Wrong password!")
-            session['logged'] = False #Marks the user as "not logged in"
+        for user in users:
+            if user.username == usern: #If the user exists
+                if (users[user] == pwd):
+                    session['logged'] = True #Mark the user as "logged in"
+                    session['username'] = user.username
+            else:
+                session['logged'] = False #Marks the user as "not logged in"
         return index() #Reloads the page with 'logged' marked as either "True" or "False"
-
 
 
 """
@@ -70,8 +71,6 @@ The webpage where videos can be exchanged between users
 @node.route('/sendvideo', methods=['GET'])
 def sendvids():
 	return render_template('sendvideo.html') #Renders the send video page
-
-
 
 @node.route('/send', methods=['POST', 'GET'])
 def player():
@@ -86,15 +85,12 @@ def player():
 			render_template("sendvideo.html")
 
 
-
 """
 The place where a new user can be created
 """
 @node.route('/register', methods=['POST', 'GET'])
 def render():
 	return render_template('register.html')
-
-
 
 """
 The form on the "register.html" page, that sends what the user typed in for username, password, and confirm password. If the username is already taken, or their passwords don't match, it will just refresh the page. Otherwise, their information will be added to the the dictionary "users".
@@ -111,7 +107,8 @@ def send_register():
         if userr in users:
             return render_template('register.html')
         else:
-            users[userr] = pwd
+            new_user = user_class.User(userr, "", mail_address)
+            users[new_user] = pwd
             #return redirect(url_for('/'), code=302)
             return render_template("login.html")
             #check_user()
@@ -122,7 +119,6 @@ def logout():
     session['logged'] = False
     session['username'] = None
     return render_template('login.html')
-
 
 """Home page for a user"""
 @node.route('/hub', methods=['POST'])
@@ -146,13 +142,14 @@ def send_new_pass():
     password_conf = request.form.get('conf_pass')
     new_password = request.form.get('new_pass')
     confirm_new = request.form.get('conf_new_pass')
-    if user_conf in users:
-        if users[user_conf] == password_conf: #makes sure password is correct
-            if new_password == confirm_new: #confirms new password
-                users[user_conf] = new_password #changes password
-                session['logged'] = False
-                session['username'] = None
-                return render_template('login.html')
+    for user in users:
+        if user.username == user_conf:
+            if users[user] == password_conf: #makes sure password is correct
+                if new_password == confirm_new: #confirms new password
+                    users[user] = new_password #changes password
+                    session['logged'] = False
+                    session['username'] = None
+                    return render_template('login.html')
     #if anything is not correct, bring user back to change password page
     return render_template('change-password.html')
 
@@ -177,11 +174,14 @@ def search():
 """Form that deletes a given account"""
 @node.route('/delete-account', methods=['GET'])
 def delete_account():
-    del_user = session['username']
+    del_usern = session['username']
     session['logged'] = False
-    del users[session['username']] ## remove user from user list
-    session['username'] = None
-    return render_template('login.html')
+    for user in users:
+        if user.username == del_usern:
+            del users[user] ## remove user from user list
+            session['username'] = None
+            return render_template('login.html')
+    return render_template('my-account.html') ## this should never be reached
 
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
