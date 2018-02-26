@@ -11,13 +11,17 @@ nodes and send the files over and information over.
 import socket
 import os
 
+# a dictionary of key of socket and val of lists with (address, how many videos
+# on that nodes connection)
 connections = []
+
+#temp list of users for testing
 users = {"sender":4,"reciever":3}
+
+
 
 """
 Vlocc Objects, consisting of:
-
-
 """
 class Vlocc:
     """
@@ -48,11 +52,27 @@ def mine():
     pass
 
 
+def distribute(c,fd):
+    connections[-1][2] += 1
+    c[0].send(str.encode(fd))
+    fd_cur = open("./newVideos/"+fd,'rb')
+    info = fd_cur.read(1024)
+    while(info):
+        print("sending")
+        c[0].send(info)
+        info = fd_cur.read(1024)
+    print("completed")
+    fd_cur.close()
+    os.remove("./newVideos/"+fd)
+    c[0].close()
+    
+
 def main():
     """
     Where all of the functions will be called
     """
 
+    #Going to implement multithreading
     s = socket.socket()
 
     host = ''
@@ -65,22 +85,14 @@ def main():
     while(True):
         c,addr = s.accept()
         command = c.recv(1024).decode("utf-8")
+        connections.append([c,addr,0])
+        #This is here temp
+        #Will run all using multithreading, just need to learn
+        # Pythons version of it :)
         if command == "download":
             for fd in os.listdir("./newVideos"):
-                c.send(str.encode(fd))
-                fd_cur = open("./newVideos/"+fd,'rb')
-                info = fd_cur.read(1024)
-                while(info):
-                    print("sending")
-                    c.send(info)
-                    info = fd_cur.read(1024)
-                print("completed")
-                fd_cur.close()
-                os.remove("./newVideos/"+fd)
-                c.close()
-                        
-
-
+                distribute(connections[-1],fd)
+                            
         """
         c,addr = s.accept()
         command = c.recv(1024).decode("utf-8")
@@ -92,9 +104,6 @@ def main():
             else:
                 print("Fail")
         """
-        
-
-            
 
 main()
 
