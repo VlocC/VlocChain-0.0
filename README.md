@@ -24,7 +24,7 @@ To be written..
 
 #### Back End
 ##### controller.py
--[Link](/Backend/controller.py)
+-[Link](/BackEnd/controller.py)
 
 -Funcitonality
   1. Takes files in *newVideos/* and distributes them to the known and connected nodes. 
@@ -36,7 +36,7 @@ To be written..
   2. Will eventually not exist, the main server will also just be a **node**
 
 ##### node.py
-- [Link](/Backend/node.py)
+- [Link](/BackEnd/node.py)
 
 ## Becoming a Node
 
