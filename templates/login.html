@@ -1,29 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		function redirect_login() {
+			location.href = "/register";
+		}
+	</script>
 	<head>
-		<style>
-		body {
-			height: 100vh;
-			width: 100%;
-			background-color: pink;
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<style type="text/css">
+		body{
+			height:100vh;
+			width:100%;
+			background-image: url("/static/bg.png");
+			background-attachment: fixed;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-color: white;
+			overflow: hidden;
+		}
+		.window {
+			border-top:30px;
+		}
+		.center {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			width: 50%;
 		}
 		.info {
-			border-top: 30px;
-		
+			margin-top: 5vh;
+		}
+		#labels {
+			color: white;
+			margin-right: 10vw;
+			text-align: center;
+		}
+		#form {
+			margin: 0 auto;
+			width: 80%;
+		}
+		#logo {
+			width: auto;
+			max-height: 40%;
 		}
 		</style>
-		
-		
 	</head>
+	
 	<body>
-	<div class="info" align="center">
-		<form action="/login" method="POST">
-			Username: <input type="text" name="username" placeholder="username"><br>
-			Password: <input type="password" name="password" placeholder="password"><br>
-			<input type="submit" name="Login">
-		</form>
-		<form action="/register">
-				<input type="submit" value="Register">
+		<img src="/static/name.png" id="logo" class="center" width="1080" height="540">
+		<div class="container" title="user_inputs">
+			<form action="login" method="POST" align=center>
+				<div class="info">
+					<div class="form-group row h-10 justify-content-center">
+						<label for="username" id="labels" class="col-sm-1 col-form-label">Username</label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" id="boxes" name="username" placeholder="Username">
+						</div>
+					</div>
+					<div class="form-group row h-10 justify-content-center">
+						<label for="password" id="labels" class="col-sm-1 col-form-label">Password</label>
+						<div class="col-sm-5">
+							<input type="password" name="password" id="boxes" placeholder="Password" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="info">
+					<div class="form-group row h-20 justify-content-center">
+						<div class="col-sm-10">
+							<button type="button" id="registerButton" onclick="redirect_login(this)" class="btn btn-outline-light" name="register" value="register">Register</button>
+							<input type="submit" class="btn btn-outline-light" name="Sign In" value="Sign In">
+						</div>
+					</div>
+				</div>
 			</form>
 		</div>
 	</body>
