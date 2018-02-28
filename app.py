@@ -62,7 +62,7 @@ def check_user():
                     session['username'] = user.username
             else:
                 session['logged'] = False #Marks the user as "not logged in"
-        return index() #Reloads the page with 'logged' marked as either "True" or "False"
+        return redirect("/") #Reloads the index page with 'logged' marked as either "True" or "False"
 
 
 """
@@ -103,22 +103,20 @@ def send_register():
         rpwd = request.form['confirm_password']
         mail_address = request.form['email']
         if (pwd == "") or (pwd != rpwd) or (mail_address == ""):
-            return render_template('register.html')
+            return redirect("register")
         if userr in users:
             return render_template('register.html')
         else:
             new_user = user_class.User(userr, "", mail_address)
             users[new_user] = pwd
-            #return redirect(url_for('/'), code=302)
-            return render_template("login.html")
-            #check_user()
+            return redirect("/")
 
 """Returns user to login page after logging out of an account"""
 @node.route('/logout', methods=['POST'])
 def logout():
     session['logged'] = False
     session['username'] = None
-    return render_template('login.html')
+    return redirect("/")
 
 """Home page for a user"""
 @node.route('/hub', methods=['POST'])

@@ -1,33 +1,88 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		function redirect_login() {
+			location.href = "/";
+		}
+	</script>
 	<head>
-		<style>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<style type="text/css">
 		body{
 			height:100vh;
 			width:100%;
-			background-color:pink;
+			background-image: url("/static/bg.png");
+			background-attachment: fixed;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-color: white;
+			overflow: hidden;
 		}
 		.window {
 			border-top:30px;
+		}
+		.center {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			width: 50%;
+		}
+		#labels {
+			color: white;
+			margin-right: 10vw;
+			text-align: center;
+		}
+		#form {
+			margin: 0 auto;
+			width: 80%;
+		}
+		#logo {
+			width: auto;
+			max-height: 40%;
+		}
+		#button {
+			mari
 		}
 		</style>
 	</head>
 	
 	<body>
-		<div class="window" title="user_inputs" align="center">
-			<form action="sendregister" method="POST">
-				Username:<br>
-				<input type="text" name="username" placeholder="Username">
-				<br><br><br>
-				Password:<br>
-				<input type="password" name="password" placeholder="Password">
-				<br><br><br>
-				Confirm Password:<br>
-				<input type="password" name="confirm_password" placeholder="Password">
-				<br><br><br>
-				Email:<br> 
-				<input type="text" name="email" placeholder="E-mail">
-				<br><br><br>
-				<input type="submit" name="Register" value="Register">
+		<img src="/static/name.png" id="logo" class="center" width="1080" height="540">
+		<div class="container" title="user_inputs">
+			<form action="sendregister" method="POST" align=center>
+				<div class="form-group row h-10 justify-content-center">
+					<label for="email" id ="labels" class="col-sm-1 form-text-color">Email</label>
+					<div class="col-sm-5">
+						<input type="email" name="email" id="boxes" placeholder="E-mail" class="form-control">
+					</div>
+				</div>
+				<div class="form-group row h-10 justify-content-center">
+					<label for="username" id="labels" class="col-sm-1 col-form-label">Username</label>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" id="boxes" name="username" placeholder="Username">
+					</div>
+				</div>
+				<div class="form-group row h-10 justify-content-center">
+					<label for="password" id="labels" class="col-sm-1 col-form-label">Password</label>
+					<div class="col-sm-5">
+						<input type="password" name="password" id="boxes" placeholder="Password" class="form-control">
+					</div>
+				</div>
+				<div class="form-group row h-10 justify-content-center">
+					<label for="confirm_password" id="labels" class="col-sm-1 col-form-label">Retype Password</label>
+					<div class="col-sm-5">
+						<input type="password" name="confirm_password" id="boxes" placeholder="Retype Password" class="form-control">
+					</div>
+				</div>
+				<div class="form-group row h-20 justify-content-center">
+					<div class="col-sm-10">
+						<input type="submit" class="btn btn-outline-light" name="Register" value="Register">
+						<button type="button" id="signInButton" onclick="redirect_login(this)" class="btn btn-outline-light" name="Sign In" value="Sign In">Sign In</button>
+					</div>
+				</div>
 			</form>
 		</div>
 	</body>
