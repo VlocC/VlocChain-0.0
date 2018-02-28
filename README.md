@@ -24,7 +24,8 @@ To be written..
 
 #### Back End
 ##### controller.py
-- [Link](/controller.py)
+-[Link](/controller.py)
+
 -Funcitonality
   1. Takes files in *newVideos/* and distributes them to the known and connected nodes. 
   2. Keeps track of nodes and keeps all ledgers up to date
