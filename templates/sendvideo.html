@@ -17,10 +17,9 @@
 	</head>
 	<body>
 	<div class="info" align="center">
-		<form action="/send" method="POST">
-			<input type="text" name="username" placeholder="Send To"><br>
-			<input type="file" name="video" accept="video/*, video/mp4,video/x-m4v,video/*"><br>
-			<input type="submit" name="Login">
+		<form action="/send" method="POST" enctype="multipart/form-data">
+			<input type="file" name="video" accept="image/*, video/*, video/mp4,video/x-m4v,video/*"><br>
+			<input type="submit" name="Upload" value="Upload">
 		</form>
 		</div>
 	</body>

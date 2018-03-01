@@ -7,6 +7,8 @@ Filename: app.py
 from flask import Flask
 from flask import request, session, render_template, redirect, flash, url_for
 from lxml import html
+from werkzeug.utils import secure_filename
+from video_class import Video
 import json
 import requests
 import hashlib as hasher
@@ -14,8 +16,11 @@ import datetime as date
 import random
 import user_class
 import os
+import operator
 node = Flask(__name__)
-
+UPLOAD_FOLDER = "./newVideos"
+ALLOWED_EXTENSIONS = set(["mp4", "avi", "webm"])
+node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 """
 All global variables
@@ -23,6 +28,7 @@ All global variables
 nodes = [] #All known nodes get added here
 vlocchain = [] #the main chain, most updated
 exchanges = [] #all the exchanges
+videos = [] ## holds all instances of video class
 miner_address = "yeet" #temporary
 users = {} #full user dictionary, usernames
 admin = user_class.User("admin", "", "")
@@ -62,7 +68,7 @@ def check_user():
                     session['username'] = user.username
             else:
                 session['logged'] = False #Marks the user as "not logged in"
-        return index() #Reloads the page with 'logged' marked as either "True" or "False"
+        return redirect("/") #Reloads the index page with 'logged' marked as either "True" or "False"
 
 
 """
@@ -74,16 +80,15 @@ def sendvids():
 
 @node.route('/send', methods=['POST', 'GET'])
 def player():
-	if request.method == "POST":
-		usernew = request.form['username'] #Gets the username part of the form
-		video = request.form['video'] #Gets the password part of the form
-		print(video)
-		if usernew in users:
-			#socket
-			return "It Worked!"
-		else:
-			render_template("sendvideo.html")
-
+        if request.method == "POST":
+                video = request.files["video"]
+                filename = video.filename
+                if ('.' in filename): ## makes sure filename is recognizable
+                    if (filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS): ## if correct file
+                        filename = secure_filename(filename) ## allows os.path.join to recognize name
+                        video.save(os.path.join(node.config['UPLOAD_FOLDER'], filename))
+                        return render_template("hub.html") ## worked, send back to hub
+                return render_template("sendvideo.html") ## didn't work, reload page
 
 """
 The place where a new user can be created
@@ -103,22 +108,20 @@ def send_register():
         rpwd = request.form['confirm_password']
         mail_address = request.form['email']
         if (pwd == "") or (pwd != rpwd) or (mail_address == ""):
-            return render_template('register.html')
+            return redirect("register")
         if userr in users:
             return render_template('register.html')
         else:
             new_user = user_class.User(userr, "", mail_address)
             users[new_user] = pwd
-            #return redirect(url_for('/'), code=302)
-            return render_template("login.html")
-            #check_user()
+            return redirect("/")
 
 """Returns user to login page after logging out of an account"""
 @node.route('/logout', methods=['POST'])
 def logout():
     session['logged'] = False
     session['username'] = None
-    return render_template('login.html')
+    return redirect("/")
 
 """Home page for a user"""
 @node.route('/hub', methods=['POST'])
@@ -156,7 +159,12 @@ def send_new_pass():
 """Page that displays popular videos of entire site"""
 @node.route('/popular-videos', methods=['POST'])
 def popular():
-    return render_template('popular-videos.html')
+    video_views = {}
+    sorted_videos = []
+    for video in videos:
+        video_views[video] = video.views
+    sorted_videos = sorted(video_views.items(), reverse=True, key=operator.itemgetter(1))
+    return render_template('popular-videos.html', videos = sorted_videos)
 
 
 """Page that displays videos created/owned by signed in user"""

@@ -28,7 +28,6 @@ def download_vid(s):
     print("Completed")    
     fd.close()
 
-
 def main():
     s = socket.socket()
     host = "127.0.0.1"
@@ -40,6 +39,5 @@ def main():
         if action == "download":
             download_vid(s)
 
-    
 
 main()

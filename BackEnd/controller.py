@@ -1,6 +1,6 @@
 """
 VlocChain
-Authors~ Owen Sullivan, _
+Authors~ Owen Sullivan
 File- controller.py
 Desc- This is going to be one of the two main files
 This is going to be the backend side. Using sockets to update the other 
@@ -28,6 +28,7 @@ class Controller(object):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
 
+        
     def listen(self):
     
         self.sock.listen(5)
@@ -35,9 +36,7 @@ class Controller(object):
             client,address = self.sock.accept()
             print("Connection to ",address)
             threading.Thread(target = distribute, args = (client,address)).start()
-
-
-
+            
 
 def distribute(client,address):
     """
@@ -60,8 +59,8 @@ def distribute(client,address):
             print("completed")
             fd_cur.close()
             os.remove("./newVideos/"+directory[0])
+
             
-    
 
 def consensus():
     """
@@ -78,13 +77,10 @@ def mine():
     pass
 
 
-
-    
 def main():
     """
     Where all of the functions will be called
     """
-
     host = ''
     port = 50007
 
