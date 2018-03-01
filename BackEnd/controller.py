@@ -9,6 +9,7 @@ nodes and send the files over and information over.
 """
 
 import socket
+import threading
 import os
 
 # a dictionary of key of socket and val of lists with (address, how many videos
@@ -19,6 +20,48 @@ connections = []
 users = {"sender":4,"reciever":3}
 
 
+class Controller(object):
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind((self.host, self.port))
+
+    def listen(self):
+    
+        self.sock.listen(5)
+        while True:
+            client,address = self.sock.accept()
+            print("Connection to ",address)
+            threading.Thread(target = distribute, args = (client,address)).start()
+
+
+
+
+def distribute(client,address):
+    """
+    this distributes the videos to the nodes
+    """
+    print("Distribute")
+    while True:
+        directory = os.listdir("./newVideos")
+        if(len(directory) > 0 ):
+            print("Sending")
+            client.send(str.encode("download")) 
+            client.send(str.encode(directory[0]))
+            fd_cur = open("./newVideos/"+directory[0],'rb')
+            info = fd_cur.read(1024)
+            while(info):
+                print("sending")
+                client.send(info)
+                info = fd_cur.read(1024)
+            client.send(str.encode("DOWNLOAD COMPLETE"))
+            print("completed")
+            fd_cur.close()
+            os.remove("./newVideos/"+directory[0])
+            
+    
 
 def consensus():
     """
@@ -35,47 +78,17 @@ def mine():
     pass
 
 
-def distribute(c,fd):
-    connections[-1][2] += 1
-    c[0].send(str.encode(fd))
-    fd_cur = open("./newVideos/"+fd,'rb')
-    info = fd_cur.read(1024)
-    while(info):
-        print("sending")
-        c[0].send(info)
-        info = fd_cur.read(1024)
-    print("completed")
-    fd_cur.close()
-    os.remove("./newVideos/"+fd)
-    c[0].close()
-    
 
+    
 def main():
     """
     Where all of the functions will be called
     """
 
-    #Going to implement multithreading
-    s = socket.socket()
-
     host = ''
     port = 50007
 
-    s.bind((host,port))
-    s.listen(5)
-    # Right now, Temporarily
-    # Just check for files and send them
-    while(True):
-        c,addr = s.accept()
-        command = c.recv(1024).decode("utf-8")
-        connections.append([c,addr,0])
-        #This is here temp
-        #Will run all using multithreading, just need to learn
-        # Pythons version of it :)
-        if command == "download":
-            for fd in os.listdir("./newVideos"):
-                distribute(connections[-1],fd)
-                            
+    Controller(host,port).listen()
            
 main()
 

@@ -12,19 +12,21 @@ import socket
 
 def download_vid(s):
     
-    s.send(str.encode("download"))
     filename = s.recv(1024).decode("utf-8")
-    fd = open("./nodeVideos/"+filename,"wb")
+    fd = open("./NodeVideos/"+filename,"wb")
     info = s.recv(1024)
     while(info):
         print("Recieving")
+        try:
+            info.decode("utf-8") == "DOWNLOAD COMPLETE"
+            break
+        except UnicodeDecodeError:
+            pass
         fd.write(info)
         info = s.recv(1024)
-        
+    
+    print("Completed")    
     fd.close()
-    s.shutdown(socket.SHUT_WR)
-    s.close()
-
 
 
 def main():
@@ -32,10 +34,12 @@ def main():
     host = "127.0.0.1"
     port = 50007
     s.connect((host,port))
-    command = input("input download")
     
-    if command == "download":
-        download_vid(s)
-    print("Complete")
+    while True:
+        action = s.recv(1024).decode("utf-8")
+        if action == "download":
+            download_vid(s)
+
+    
 
 main()
