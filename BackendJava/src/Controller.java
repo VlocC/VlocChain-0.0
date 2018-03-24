@@ -30,7 +30,7 @@ public class Controller {
             Socket clientSocket = serverSocket.accept();
 
             // Create the handler and start it
-            ClientHandler clientHandler = new ClientHandler(clientSocket);
+            ClientHandler clientHandler = new ClientHandler(clientSocket,null);
             Thread thread = new Thread(clientHandler);
             clientHandler.setThreadName(thread.getName());
             thread.start();
@@ -48,15 +48,15 @@ public class Controller {
 class ClientHandler implements Runnable {
 
     private Socket client;
-    private BufferedReader bufferedReader;
-    private PrintStream printStream;
+    private FileInputStream inputStream;
+    private DataOutputStream out;
     private String threadName;
 
-    public ClientHandler(Socket client) throws IOException {
+    public ClientHandler(Socket client, String file) throws IOException {
 
         this.client = client;
-        bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        printStream = new PrintStream(client.getOutputStream());
+        out = new DataOutputStream(s.getOutputStream());
+        inputStream = new FileInputStream(file);
     }
 
     public void setThreadName(String threadName) {
@@ -68,28 +68,16 @@ class ClientHandler implements Runnable {
     @Override
     public void run() {
 
-        // Keep a loop till we break it
-        while(true){
+        byte[] info = new byte[4096];
 
-            // For now just transmit messages
-            String line = null;
-            try {
-                line = bufferedReader.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // Check if the client wants to quit, to test connection
-            if(line.equalsIgnoreCase("quit")) break;
-
-            System.out.println("Recieved " + line + " from " + this.threadName);
-            printStream.print(line.toUpperCase());
+        while (inputStream.read(info)){
+            out.write(info);
         }
-
+        System.out.println("File Sent");
         // Close our streams
         try {
-            bufferedReader.close();
-            printStream.close();
+            inputStream.close();
+            out.close();
             client.close();
         } catch (IOException e) {
             e.printStackTrace();

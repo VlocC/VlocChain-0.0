@@ -20,17 +20,12 @@ import java.util.Scanner;
 public class Holder {
     public static void main(String[] args) throws IOException {
         Socket client = new Socket("localhost",6789);
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        PrintStream printStream = new PrintStream(client.getOutputStream());
+        DataInputStream inputStream = new DataInputStream(client.getInputStream);
+        FileOutputStream writer = new FileOutputStream("random.txt");
+        byte[] info = new byte[4096]
 
-        Scanner sc = new Scanner(System.in);
-        while(true) {
-            System.out.println("Print message");
-            String message = sc.nextLine();
-            printStream.print(message);
-            if(message.equalsIgnoreCase("quit")) break;
-            System.out.println("Response: " + bufferedReader.readLine());
-        }
+        // Preparing to send out videos again!
+
         bufferedReader.close();
         printStream.close();
         client.close();
