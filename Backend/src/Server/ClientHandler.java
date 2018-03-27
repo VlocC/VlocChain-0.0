@@ -20,6 +20,7 @@ class ClientHandler implements Runnable {
 
     public ClientHandler(Socket client, String file) throws IOException {
 
+
         this.client = client;
         out = new DataOutputStream(client.getOutputStream());
         inputStream = new FileInputStream(file);

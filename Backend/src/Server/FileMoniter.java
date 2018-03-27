@@ -1,6 +1,9 @@
 package Server;
 
+import Utils.IpObject;
+
 import java.io.File;
+import java.io.IOException;
 
 public class FileMoniter implements Runnable{
 
@@ -8,17 +11,31 @@ public class FileMoniter implements Runnable{
 
     @Override
     public void run() {
-        File temp = checkForNewVideos();
-        if(temp != null) {
 
-            VideoUploader videoUploader = new VideoUploader();
+        while(true) {
 
-        }
+            File temp = checkForNewVideos();
+            if (temp != null) {
 
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                IpObject ip = Controller.ipSet.first();
+                ip.setVideoNumber();
+                VideoUploader videoUploader = null;
+
+                try {
+                    videoUploader = new VideoUploader(temp,ip.getIp());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Thread thread = new Thread(videoUploader);
+                thread.start();
+            }
+
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -29,10 +46,6 @@ public class FileMoniter implements Runnable{
         if(dir_contents == null || dir_contents.length <= 0 ) return null;
 
         return dir_contents[0];
-
     }
-
-
-
 
 }

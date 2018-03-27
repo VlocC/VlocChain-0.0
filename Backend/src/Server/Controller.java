@@ -8,12 +8,14 @@ package Server;
  * Then alert the holders on when to send up a connection
  */
 
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
+import Utils.IpObject;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * Where the server socket is ran
@@ -25,13 +27,18 @@ public class Controller {
     public static final String NEW_VIDEO = "new_video";
     public static final String RECALL = "recall";
     public static HashMap<String,String> videoMap;
-    public static HashMap<String,Integer> ipSize;
+    public static TreeSet<IpObject> ipSet;
 
 
     public static void main(String[] args) throws IOException{
 
         videoMap = new HashMap<>();
-        ipSize = new HashMap<>();
+        ipSet = new TreeSet<>(Comparator.comparingInt(IpObject::getVideoNumber));
+
+        // Create the FileMonitor
+        FileMoniter fileMoniter = new FileMoniter();
+        Thread monitorThread = new Thread(fileMoniter);
+        monitorThread.start();
 
         ServerSocket serverSocket = new ServerSocket(6789);
         System.out.println("Server Running");
