@@ -25,10 +25,10 @@ public class VideoUploader implements Runnable {
         }
 
         assert printStream != null;
-        printStream.print(Controller.NEW_VIDEO);
+        printStream.println(Controller.NEW_VIDEO);
         System.out.println(file.getName());
-        printStream.print(file.getName());
-        printStream.print((int)file.getTotalSpace());
+        printStream.println(file.getName());
+        printStream.println((int)file.getTotalSpace());
 
         try {
             this.sendVideo();

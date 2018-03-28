@@ -32,7 +32,7 @@ public class VideoDownloader implements Runnable{
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
         byte[] info = new byte[4096];
 
-        int read = 0;
+        int read;
         int totalRead = 0;
         int remaining = fileSize;
         while((read = dataInputStream.read(info, 0, Math.min(info.length, remaining))) > 0) {
