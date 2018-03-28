@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			body{
+				height:100vh;
+				width: 100%;
+				background-color:pink;
+				outline: 4px solid;
+				outline-color: coral;
+				outline-offset: 4px;
+			}
+			.top {
+				border-top:30px;
+			}
+			.left {
+				position: absolute;
+			}
+			.center {
+				position: absolute;
+				left: 40vw;
+			}
+			
+			.right {
+				position: absolute;
+				left: 90vw;
+			}
+			.window{
+				border-top:30px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div class="top">
+			<div class ="left">
+				<form action="/my-account" method="POST">
+					<input type="submit" name="account" value="My Account">
+				</form>
+			</div>
+			<div class = "center">
+				<form action="/search" method="POST">
+					Search: <input type="text" name="search">
+					<input type="submit" name="Enter">
+				</form>
+			</div>
+			<div class = "right">
+				<form action="/logout" method="POST">
+					<input type="submit" name="sign_out" value="Sign Out">
+				</form>
+			</div>
+		</div>
+		<br> <br>
+		<div class="window">
+			<form action="/my-videos" method="POST">
+				<input type="submit" name="self_videos" value="My Videos">
+			</form>
+			<br>
+			<form action="/popular-videos" method="POST">
+				<input type="submit" name="videos" value="Popular Videos">
+			</form>
+		</div>
+			<br>
+			<hr>
+			<h1 align="center">
+				<font face="cursive" size="30">
+					VlocChain
+				</font>
+			</h1>
+			<h1 align="center">
+				<a href="https://placeholder.com"><img src="http://via.placeholder.com/350x150"></a>
+			</h1>
+			<hr>
+			<h1>
+				Waddup Pimps
+			</h1>
+		</div>
+	</body>
+
+</html>
