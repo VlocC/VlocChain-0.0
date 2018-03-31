@@ -188,8 +188,16 @@ def delete_account():
         if user.username == del_usern:
             del users[user] ## remove user from user list
             session['username'] = None
-            return render_template('login.html')
-    return render_template('my-account.html') ## this should never be reached
+    return render_template('login.html')
+
+"""This function is called when a user clicks on a video they want to watch"""
+@node.route('/<user><title>', methods=['POST'])
+def watch(user, title):
+    return render_template('player.html', user=user, title=title)
+    
+@node.errorhandler(405) #bad url
+def method_not_allowed(error):
+    return render_template('login.html') #send to login page
 
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
