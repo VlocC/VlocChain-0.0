@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			$('#vide').click(function() {
+				if ($(this)[0].paused) {
+					$(this)[0].play();
+					$('#main').addClass('pause').removeClass('play');
+				} else {
+					$(this)[0].pause();
+					$('#main').addClass('play').removeClass('pause');
+				}			});
+			$('#main').click(function() {
+				if ($('#vide')[0].paused) {
+					$('#vide')[0].play();
+					$(this).addClass('pause').removeClass('play');
+				} else {
+					$('#vide')[0].pause();
+					$(this).addClass('play').removeClass('pause');
+				}
+			});
+		});
+	</script>
+	<head>
+	<style type="text/css">
+body{
+	height:100vh;
+	width:100%;
+	background-attachment: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
+	/*background-color: rgb(36, 46, 62);*/
+	background: linear-gradient(to right, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29)
+	/*overflow: hidden;*/
+}
+.window {
+	border-top:30px;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+.info {
+	margin-top: 5vh;
+}
+
+.boxes:hover {
+	background-color: grey;
+}
+.content {
+	margin-left: 5%;
+	margin-right: 5%;
+	/*top: 25%;*/
+	top: 10%;
+	height: 80%;
+	width: 90%;
+	/*background-color: green;*/
+	display: flex;
+	position: fixed;
+	z-index: 1;
+	overflow: hidden;
+}
+#navigate {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	height: 10%;
+	z-index: 20;
+	background-size: 100% 200%; 
+	background-image: linear-gradient(transparent, transparent 50%, white 50%, white);
+	transition: background-position 0.5s;
+	transition-timing: ease-in-out;
+}
+
+#navigate:hover  {
+	/*background-color: white;*/
+	background-position: 0 -100%;
+	color: black;
+}
+#navigate:hover #text {
+	color: black;
+}
+#center {
+	margin: 0 auto;
+	float: none;
+}
+.player {
+	top: 100px;
+	width: 80%;
+	height: auto;
+	/*max-width: 90%;*/
+	margin: 0 auto;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+}
+.controls {
+	bottom: -45px;
+	height: 45px;
+	width: 100%;
+	background-color: black;
+	border-style: solid;
+	border-width: thin;
+	border-color: blue transparent transparent;
+	position: absolute;
+	transition: all 0.2s;
+	transition-timing: ease-in-out;
+	opacity: 0.5;
+	z-index: 100;
+}
+
+.vid {
+	width: 100%;
+	box-shadow: 0 0 30px 20px #131135;
+
+}
+.player:hover .controls {
+	transform: translate(0, -45px);
+}
+.controls:hover {
+	opacity: 1.0;
+}
+#text {
+	color: white;
+}
+#main {
+	height: 45px;
+	width: 45px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	/*background-image: url("pause_control.png");*/
+	float: left;
+	z-index: 101;
+}
+
+.pause {
+	background-image: url("pause_control.png");
+}
+.play {
+	background-image: url("play_button.png");
+}
+
+#expand {
+	height: 45px;
+	width: 45px;
+	float: right;
+	top: 0;
+	z-index: 101;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-image: url("expand.png");
+	display: inline;
+}
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-light" style="background-color: none;" id="navigate">
+	<ul class="navbar-nav mr-auto">
+		<li class="nav-item">
+			<a class="nav-link" id="text" href="#">VlocC</a>
+		</li>
+	</ul>
+
+	<div class="dropdown my-sm-2">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
+	<ul class="dropdown-menu dropdown-menu-right text-left">
+		<a class="dropdown-item" href='#'>My Profile</a>
+		<a class="dropdown-item" href='#'>Sign Out</a>
+	</ul>
+	</div>
+</nav>
+	<div class="player">
+		<video class="vid" id="vide" src="author-title.mov" autoplay>
+		</video>
+		<div class="controls">
+			<div class="pause" id="main"></div>
+			<div id="expand"></div>
+		</div>
+	</div>
+</body>
+</html>
