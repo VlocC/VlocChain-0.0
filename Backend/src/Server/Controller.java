@@ -29,15 +29,14 @@ public class Controller {
     public static HashMap<String,String> videoMap;
     public static TreeSet<IpObject> ipSet;
 
-
     public static void main(String[] args) throws IOException{
 
         videoMap = new HashMap<>();
         ipSet = new TreeSet<>(Comparator.comparingInt(IpObject::getVideoNumber));
 
         // Create the FileMonitor
-        FileMoniter fileMoniter = new FileMoniter();
-        Thread monitorThread = new Thread(fileMoniter);
+        FileMonitor fileMonitor = new FileMonitor();
+        Thread monitorThread = new Thread(fileMonitor);
         monitorThread.start();
 
         ServerSocket serverSocket = new ServerSocket(6789);
@@ -46,12 +45,11 @@ public class Controller {
         while(true) { // Loop and look for new connections
             // Accept a new connection
             Socket clientSocket = serverSocket.accept();
+            IpObject ipObject= new IpObject(clientSocket.getRemoteSocketAddress().toString(),0);
+            ipSet.add(ipObject);
+            // ADD MONITORING FOR RECALLS
 
-            // Create the handler and start it
-            ClientHandler clientHandler = new ClientHandler(clientSocket,null);
-            Thread thread = new Thread(clientHandler);
-            clientHandler.setThreadName(thread.getName());
-            thread.start();
+
         }
     }
 }

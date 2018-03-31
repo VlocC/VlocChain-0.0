@@ -5,7 +5,9 @@ import Utils.IpObject;
 import java.io.File;
 import java.io.IOException;
 
-public class FileMoniter implements Runnable{
+import static Server.Controller.videoMap;
+
+public class FileMonitor implements Runnable{
 
     public static final String DIRECTORY = "";
 
@@ -23,6 +25,7 @@ public class FileMoniter implements Runnable{
 
                 try {
                     videoUploader = new VideoUploader(temp,ip.getIp());
+                    videoMap.put(temp.getName(),ip.getIp());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
