@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			$(".boxes").css({
+				'height': 
+				($(".content").height()/3 + 'px')
+			});
+			$(".boxes").css({
+				'width': 
+				($(".boxes").height()/10*16 + 'px')
+			});
+			$(".thumbnail").css({
+				'width': 
+				($(".boxes").height()*1 + 'px')
+			});
+			$(".thumbnail").css({
+				'height': 
+				($(".thumbnail").width()/16*10 + 'px')
+			});
+			$(".thumbnail").each(function() {
+				$(this).html('<img src="test.jpg"><a>Title</a>');
+				// $(".thumbnail").css({
+				// 	'background-image':
+				// 	'test.jpg'
+				// });
+			});
+		});
+	</script>
+	<head>
+	<style type="text/css">
+		body{
+			height:100vh;
+			width:100%;
+			background-attachment: fixed;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-color: rgb(36, 46, 62);
+			/*overflow: hidden;*/
+		}
+		.window {
+	border-top:30px;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+.info {
+	margin-top: 5vh;
+}
+.boxes {
+	/*background-color: tomato;*/
+	outline: 2px dotted black;
+	position: relative;
+	display: inline-block;
+	float: none;
+	color: white;
+	/*padding-top: 20px; */
+}
+.content {
+	margin-left: 5%;
+	margin-right: 5%;
+	/*top: 25%;*/
+	top: 10%;
+	height: 80%;
+	width: 90%;
+	/*background-color: green;*/
+	display: flex;
+	position: fixed;
+	z-index: -1;
+	overflow: hidden;
+}
+#navigate {
+	position: fixed;
+	width: 100%;
+}
+#center {
+	margin: 0 auto;
+	float: none;
+}
+.thumbnail {
+	margin-top: 20px;
+	/*background-color: orange;*/
+}
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-light bg-light" id="navigate">
+	<ul class="navbar-nav mr-auto">
+		<li class="nav-item">
+			<a class="nav-link" href="#">VlocC</a>
+		</li>
+	</ul>
+
+	<div class="dropdown my-sm-2">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
+	<ul class="dropdown-menu dropdown-menu-right text-left">
+		<a class="dropdown-item" href='#'>My Profile</a>
+		<a class="dropdown-item" href='#'>Sign Out</a>
+	</ul>
+	</div>
+</nav>
+<div class="content">
+	<div class="container-fluid">
+	<div class="row" align="center">
+		<div class="boxes" id="center">
+			<div class="thumbnail"></div>
+		</div>
+		<div class="boxes" id="center">
+			<div class="thumbnail"></div>
+		</div>
+		<div class="boxes" id="center">
+			<div class="thumbnail"></div>
+		</div>
+	</div>
+	</div>
+</div>
+</body>
+</html>
