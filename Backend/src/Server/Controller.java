@@ -29,7 +29,6 @@ public class Controller {
     public static HashMap<String,String> videoMap;
     public static TreeSet<IpObject> ipSet;
 
-
     public static void main(String[] args) throws IOException{
 
         videoMap = new HashMap<>();
