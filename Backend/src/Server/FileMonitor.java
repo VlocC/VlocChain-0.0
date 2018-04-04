@@ -9,7 +9,7 @@ import static Server.Controller.videoMap;
 
 public class FileMonitor implements Runnable{
 
-    public static final String DIRECTORY = "~/VlocChain/newVideos";
+    public static final String DIRECTORY = "/home/multiojuice/VlocChain/newVideos/";
 
     @Override
     public void run() {
@@ -18,6 +18,7 @@ public class FileMonitor implements Runnable{
 
             File temp = checkForNewVideos();
             if (temp != null) {
+                System.out.println("Sending " + temp);
 
                 IpObject ip = Controller.ipSet.first();
                 ip.setVideoNumber();
@@ -42,12 +43,11 @@ public class FileMonitor implements Runnable{
         }
     }
 
-    private File checkForNewVideos() {
+    public static File checkForNewVideos() {
 
         File dir = new File(DIRECTORY);
         File[] dir_contents = dir.listFiles();
         if(dir_contents == null || dir_contents.length <= 0 ) return null;
-
         return dir_contents[0];
     }
 
