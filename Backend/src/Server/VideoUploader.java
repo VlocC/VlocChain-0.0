@@ -2,6 +2,7 @@ package Server;
 
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class VideoUploader implements Runnable {
@@ -9,9 +10,9 @@ public class VideoUploader implements Runnable {
     private File file;
     private Socket socket;
 
-    public VideoUploader(File file,String ip) throws IOException {
+    public VideoUploader(File file, InetAddress addr) throws IOException {
         this.file = file;
-        this.socket = new Socket(ip,6789);
+        this.socket = new Socket(addr,6789);
     }
 
     @Override

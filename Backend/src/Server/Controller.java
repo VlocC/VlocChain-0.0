@@ -11,6 +11,7 @@ package Server;
 import Utils.IpObject;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Comparator;
@@ -26,7 +27,7 @@ public class Controller {
 
     public static final String NEW_VIDEO = "new_video";
     public static final String RECALL = "recall";
-    public static HashMap<String,String> videoMap;
+    public static HashMap<String,InetAddress> videoMap;
     public static TreeSet<IpObject> ipSet;
 
     public static void main(String[] args) throws IOException{
@@ -39,13 +40,13 @@ public class Controller {
         Thread monitorThread = new Thread(fileMonitor);
         monitorThread.start();
 
-        ServerSocket serverSocket = new ServerSocket(6789);
+        ServerSocket serverSocket = new ServerSocket(6790);
         System.out.println("Server Running");
 
         while(true) { // Loop and look for new connections
             // Accept a new connection
             Socket clientSocket = serverSocket.accept();
-            IpObject ipObject= new IpObject(clientSocket.getRemoteSocketAddress().toString(),0);
+            IpObject ipObject= new IpObject(clientSocket.getLocalAddress(),0);
             ipSet.add(ipObject);
             // ADD MONITORING FOR RECALLS
 
