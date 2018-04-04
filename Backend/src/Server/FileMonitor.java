@@ -9,7 +9,7 @@ import static Server.Controller.videoMap;
 
 public class FileMonitor implements Runnable{
 
-    public static final String DIRECTORY = "";
+    public static final String DIRECTORY = "~/VlocChain/newVideos";
 
     @Override
     public void run() {
@@ -24,8 +24,8 @@ public class FileMonitor implements Runnable{
                 VideoUploader videoUploader = null;
 
                 try {
-                    videoUploader = new VideoUploader(temp,ip.getIp());
-                    videoMap.put(temp.getName(),ip.getIp());
+                    videoUploader = new VideoUploader(temp,ip.getAddr());
+                    videoMap.put(temp.getName(),ip.getAddr());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -35,7 +35,7 @@ public class FileMonitor implements Runnable{
             }
 
             try {
-                Thread.sleep(15000);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

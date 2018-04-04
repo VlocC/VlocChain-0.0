@@ -23,6 +23,8 @@ public class Holder {
 
     public static void main(String[] args) throws IOException {
 
+        Socket ControllerConnection = new Socket("localhost",6790);
+
         // This is the socket that will always be listening for new commands!
         serverSocket = new ServerSocket(6789);
 

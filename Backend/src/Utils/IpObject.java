@@ -1,13 +1,14 @@
 package Utils;
 
+import java.net.InetAddress;
 import java.util.Objects;
 
 public class IpObject {
-    private final String ip;
+    private final InetAddress addr;
     private int videoNumber;
 
-    public IpObject(String ip, int videoNumber) {
-        this.ip = ip;
+    public IpObject(InetAddress addr, int videoNumber) {
+        this.addr = addr;
         this.videoNumber = videoNumber;
     }
 
@@ -15,9 +16,8 @@ public class IpObject {
         this.videoNumber += 1;
     }
 
-    public String getIp() {
-
-        return ip;
+    public InetAddress getAddr() {
+        return addr;
     }
 
     public int getVideoNumber() {
@@ -30,12 +30,12 @@ public class IpObject {
         if (!(o instanceof IpObject)) return false;
         IpObject ipObject = (IpObject) o;
         return videoNumber == ipObject.videoNumber &&
-                Objects.equals(ip, ipObject.ip);
+                Objects.equals(addr, ipObject.addr);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(ip, videoNumber);
+        return Objects.hash(addr, videoNumber);
     }
 }
