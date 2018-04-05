@@ -5,6 +5,7 @@ Filename: app.py
 """
 
 from flask import Flask
+from flaskext.mysql import MySQL
 from flask import request, session, render_template, redirect, flash, url_for
 from lxml import html
 from werkzeug.utils import secure_filename
@@ -17,7 +18,11 @@ import random
 import user_class
 import os
 import operator
+import configdb
 node = Flask(__name__)
+node = configdb.opendb(node)
+mysql = MySQL(node)
+
 UPLOAD_FOLDER = "./newVideos"
 ALLOWED_EXTENSIONS = set(["mp4", "avi", "webm"])
 node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
