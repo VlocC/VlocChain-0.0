@@ -63,12 +63,16 @@ img {
 }
 .boxes {
 	/*background-color: tomato;*/
-	outline: 2px dotted black;
+	/*outline: 2px dotted black;*/
 	position: relative;
 	display: inline-block;
 	float: none;
 	color: white;
 	/*padding-top: 20px; */
+}
+
+.boxes:hover {
+	background-color: grey;
 }
 .content {
 	margin-left: 5%;
@@ -80,12 +84,13 @@ img {
 	/*background-color: green;*/
 	display: flex;
 	position: fixed;
-	z-index: -1;
+	z-index: 1;
 	overflow: hidden;
 }
 #navigate {
 	position: fixed;
 	width: 100%;
+	z-index: 10;
 }
 #center {
 	margin: 0 auto;

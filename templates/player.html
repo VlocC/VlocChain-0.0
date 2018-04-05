@@ -1,4 +1,284 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html lang="en">
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var vid = $('#vide');
+			vid.on('loadedmetadata', function() {
+				var dur = vid[0].duration / 100;
+				var durmin = dur.toString().split('.')[0];
+				var dursec = dur.toString().split('.')[1].substr('0','2');
+				$('.duration').text(durmin + ":" + dursec);
+			});
+			vid.on('timeupdate', function() {
+				var curr = vid[0].currentTime/100;
+				var totalDur = vid[0].duration;
+				var percentage = 100 * curr * 100 / totalDur;
+				var currmin = curr.toString().split('.')[0];
+				var currsec = curr.toString().split('.')[1].substr('0','2');
+				$('.currentTime').text(currmin + ":" + currsec);
+				$('.progress').css('width', percentage + '%');
+			});
+			function switch_button() {
+				if ($(vid)[0].paused) {
+					$(vid)[0].play();
+					$('#main').addClass('pause').removeClass('play');
+				} else {
+					$(vid)[0].pause();
+					$('#main').addClass('play').removeClass('pause');
+				}	
+			}
+			$(vid).click(function() {
+				switch_button();		
+			});
+			$('#main').click(function() {
+				switch_button();
+			});
+			$('#expand').click(function() {
+				vid[0].webkitEnterFullscreen();
+				vid[0].mozEnterFullscreen();
+			});
+			$(document).on('keypress', function(e) {
+				if(e.keyCode === 32) {
+					switch_button();
+				}
+			});
+			$(document).on('keydown', function(e) {
+				if(e.keyCode === 37) {
+					scrub_arrows(-5);
+				}
+				if(e.keyCode === 39) {
+					scrub_arrows(5);
+				}
+			});
+			var drag = false;
+			$('.scrubber').mousedown(function(pos) {
+				drag = true;
+				scrub(pos.pageX);
+			});
+			$(document).mouseup(function(pos) {
+				if (drag) {
+					drag = false;
+					scrub(pos.pageX);
+				}
+			});
+			$(document).mousemove(function(pos) {
+				if (drag) {
+					scrub(pos.pageX);
+				}
+			});
+			function scrub_arrows(x) {
+				vid[0].currentTime = vid[0].currentTime + x;
+			}
+			function scrub(x) {
+				var pos = x - $('.scrubber').offset().left;
+				var percentage = 100 * pos / $('.scrubber').width();
+				if (percentage > 100) {
+					percentage = 100;
+				}
+				if (percentage < 0) {
+					percentage = 0;
+				}
+				vid[0].currentTime = vid[0].duration * percentage / 100;
+			};
+		});
+	</script>
+	<head>
+	<style type="text/css">
+body{
+	height:100vh;
+	width:100%;
+	background-attachment: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
+	/*background-color: rgb(36, 46, 62);*/
+	background: linear-gradient(to right, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29)
+	/*overflow: hidden;*/
+}
+.window {
+	border-top:30px;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+.info {
+	margin-top: 5vh;
+}
+.boxes:hover {
+	background-color: grey;
+}
+.content {
+	margin-left: 5%;
+	margin-right: 5%;
+	/*top: 25%;*/
+	top: 10%;
+	height: 80%;
+	width: 90%;
+	/*background-color: green;*/
+	display: flex;
+	position: fixed;
+	z-index: 1;
+	overflow: hidden;
+}
+#navigate {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	height: 10%;
+	z-index: 20;
+	background-size: 100% 200%; 
+	background-image: linear-gradient(transparent, transparent 50%, white 50%, white);
+	transition: background-position 0.5s;
+	transition-timing: ease-in-out;
+}
+#navigate:hover  {
+	/*background-color: white;*/
+	background-position: 0 -100%;
+	color: black;
+}
+#navigate:hover #text {
+	color: black;
+}
+#center {
+	margin: 0 auto;
+	float: none;
+}
+.player {
+	top: 100px;
+	width: 80%;
+	height: auto;
+	/*max-width: 90%;*/
+	margin: 0 auto;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+}
+.controls {
+	bottom: -45px;
+	height: 45px;
+	width: 100%;
+	background-color: black;
+	border-style: solid;
+	border-width: thin;
+	border-color: blue transparent transparent;
+	position: absolute;
+	transition: all 0.2s;
+	transition-timing: ease-in-out;
+	opacity: 0.5;
+	z-index: 100;
+}
+.vid {
+	width: 100%;
+	box-shadow: 0 0 30px 20px #131135;
+
+}
+.player:hover .controls {
+	transform: translate(0, -45px);
+}
+.controls:hover {
+	opacity: 1.0;
+}
+#text {
+	color: white;
+}
+#main {
+	height: 45px;
+	width: 45px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	/*background-image: url("src/pause_control.png");*/
+	float: left;
+	z-index: 101;
+}
+.pause {
+	background-image: url("src/pause_control.png");
+}
+.play {
+	background-image: url("src/play_button.png");
+}
+.time {
+	color: white;
+	float: left;
+	margin-left: 5%;
+	height: 45px;	
+}
+.scrubber {
+	position: relative;
+	width: 100%;
+	height: 5px;
+	z-index: 1000;
+	background-color: grey;
+}
+.progress {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 100%;
+	background-color: blue;
+	transition: all 0.1s;
+	transition-timing: ease-in-out;
+}
+#expand {
+	height: 45px;
+	width: 45px;
+	float: right;
+	top: 0;
+	z-index: 101;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-image: url("src/expand.png");
+	display: inline;
+}
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-light" style="background-color: none;" id="navigate">
+	<ul class="navbar-nav mr-auto">
+		<li class="nav-item">
+			<a class="nav-link" id="text" href="#">VlocC</a>
+		</li>
+	</ul>
+	<div class="dropdown my-sm-2">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
+	<ul class="dropdown-menu dropdown-menu-right text-left">
+		<a class="dropdown-item" href='#'>My Profile</a>
+		<div class="dropdown-divider"></div>
+		<a class="dropdown-item" href='#'>Sign Out</a>
+	</ul>
+	</div>
+</nav>
+	<div class="player">
+		<video class="vid" id="vide" src="author-title.mov" autoplay>
+		</video>
+		<div class="controls">
+			<div class="scrubber">
+				<div class="progress">
+				</div>
+			</div>
+			<div class="pause" id="main"></div>
+			<div class="time">
+				<div style="display: table; height: 45px; overflow: hidden;">
+					<div style="display: table-cell; vertical-align: middle;">
+						<span class="currentTime">0:00</span><span>/</span><span class="duration"></span>
+					</div>
+				</div>
+=======
 <html>
 	<head>
 		<style>
@@ -43,6 +323,7 @@
 					Search: <input type="text" name="search">
 					<input type="submit" name="Enter">
 				</form>
+>>>>>>> 689346860bb1fe23570bfe0c8a6e0e1bcaac20d4
 			</div>
 			<div class = "right">
 				<form action="/logout" method="POST">
