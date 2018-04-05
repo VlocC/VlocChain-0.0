@@ -202,5 +202,5 @@ def method_not_allowed(error):
 
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
-	node.run(debug = True)
+	node.run(host='0.0.0.0')
 
