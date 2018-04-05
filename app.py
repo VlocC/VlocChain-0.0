@@ -17,18 +17,15 @@ import datetime as date
 import random
 import user_class
 import os
-<<<<<<< HEAD
+import operator
 import configdb
 node = Flask(__name__)
 node = configdb.opendb(node)
 mysql = MySQL(node)
-=======
-import operator
 node = Flask(__name__)
 UPLOAD_FOLDER = "./newVideos"
 ALLOWED_EXTENSIONS = set(["mp4", "avi", "webm"])
 node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
->>>>>>> 689346860bb1fe23570bfe0c8a6e0e1bcaac20d4
 
 """
 All global variables
