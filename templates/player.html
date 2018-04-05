@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en">
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +17,7 @@
 				$('.duration').text(durmin + ":" + dursec);
 			});
 			vid.on('timeupdate', function() {
-				var curr = vid[0].currentTime/100;
+				var curr = vid[0].currentTime /1 00;
 				var totalDur = vid[0].duration;
 				var percentage = 100 * curr * 100 / totalDur;
 				var currmin = curr.toString().split('.')[0];
@@ -275,87 +274,13 @@ img {
 			<div class="time">
 				<div style="display: table; height: 45px; overflow: hidden;">
 					<div style="display: table-cell; vertical-align: middle;">
-						<span class="currentTime">0:00</span><span>/</span><span class="duration"></span>
+						<span class="currentTime"></span><span>/</span><span class="duration"></span>
+
 					</div>
 				</div>
-=======
-<html>
-	<head>
-		<style>
-			body{
-				height:100vh;
-				width: 100%;
-				background-color:pink;
-				outline: 4px solid;
-				outline-color: coral;
-				outline-offset: 4px;
-			}
-			.top {
-				border-top:30px;
-			}
-			.left {
-				position: absolute;
-			}
-			.center {
-				position: absolute;
-				left: 40vw;
-			}
-			
-			.right {
-				position: absolute;
-				left: 90vw;
-			}
-			.window{
-				border-top:30px;
-			}
-		</style>
-	</head>
-	
-	<body>
-		<div class="top">
-			<div class ="left">
-				<form action="/my-account" method="POST">
-					<input type="submit" name="account" value="My Account">
-				</form>
 			</div>
-			<div class = "center">
-				<form action="/search" method="POST">
-					Search: <input type="text" name="search">
-					<input type="submit" name="Enter">
-				</form>
->>>>>>> 689346860bb1fe23570bfe0c8a6e0e1bcaac20d4
-			</div>
-			<div class = "right">
-				<form action="/logout" method="POST">
-					<input type="submit" name="sign_out" value="Sign Out">
-				</form>
-			</div>
+			<div id="expand"></div>
 		</div>
-		<br> <br>
-		<div class="window">
-			<form action="/my-videos" method="POST">
-				<input type="submit" name="self_videos" value="My Videos">
-			</form>
-			<br>
-			<form action="/popular-videos" method="POST">
-				<input type="submit" name="videos" value="Popular Videos">
-			</form>
-		</div>
-			<br>
-			<hr>
-			<h1 align="center">
-				<font face="cursive" size="30">
-					VlocChain
-				</font>
-			</h1>
-			<h1 align="center">
-				<a href="https://placeholder.com"><img src="http://via.placeholder.com/350x150"></a>
-			</h1>
-			<hr>
-			<h1>
-				Waddup Pimps
-			</h1>
-		</div>
-	</body>
-
+	</div>
+</body>
 </html>
