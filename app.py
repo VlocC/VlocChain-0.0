@@ -22,7 +22,7 @@ import configdb
 node = Flask(__name__)
 node = configdb.opendb(node)
 mysql = MySQL(node)
-node = Flask(__name__)
+
 UPLOAD_FOLDER = "./newVideos"
 ALLOWED_EXTENSIONS = set(["mp4", "avi", "webm"])
 node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
