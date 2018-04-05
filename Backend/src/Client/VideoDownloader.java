@@ -29,7 +29,7 @@ public class VideoDownloader implements Runnable{
     private void downloadVideo(String fileName, int fileSize) throws IOException {
 
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+        FileOutputStream fileOutputStream = new FileOutputStream("./nodeVideos/" + fileName);
         byte[] info = new byte[4096];
 
         int read;

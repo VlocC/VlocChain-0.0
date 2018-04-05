@@ -35,13 +35,18 @@ public class Controller {
         videoMap = new HashMap<>();
         ipSet = new TreeSet<>(Comparator.comparingInt(IpObject::getVideoNumber));
 
+        ServerSocket serverSocket = new ServerSocket(6790);
+        System.out.println("Server Running");
+
+        Socket clientSocket1 = serverSocket.accept();
+        IpObject ipObject1 = new IpObject(clientSocket1.getLocalAddress(),0);
+        ipSet.add(ipObject1);
+        System.out.println("Connected to the first holder");
+
         // Create the FileMonitor
         FileMonitor fileMonitor = new FileMonitor();
         Thread monitorThread = new Thread(fileMonitor);
         monitorThread.start();
-
-        ServerSocket serverSocket = new ServerSocket(6790);
-        System.out.println("Server Running");
 
         while(true) { // Loop and look for new connections
             // Accept a new connection

@@ -54,6 +54,7 @@ public class VideoUploader implements Runnable {
 
         while(fileInputStream.read(info) > 0) dataOutputStream.write(info);
 
+        file.delete();
         fileInputStream.close();
         dataOutputStream.close();
 
