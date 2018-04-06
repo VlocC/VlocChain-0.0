@@ -3,46 +3,76 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * @author Owen Sullivan
+ * @file VideoDownloader.java
+ * A thread created by holder.java
+ * This takes a socket connection and receives data
+ * With that data, it downloads a file to its file system
+ * to be stored on the network
+ */
 public class VideoDownloader implements Runnable{
 
+    // The socket that is connected to the server/video distributor
     private Socket socket;
 
-
+    /**
+     * Initialize the socket
+     * @param socket main socket
+     */
     public VideoDownloader(Socket socket) {
         this.socket = socket;
     }
 
+
+    /**
+     * The method to be ran when the thread is initialized
+     *  Communicate with the server, get initial info (file name)
+     *  Then it calls download files and closes all of our variables
+     */
     @Override
     public void run() {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintStream printStream = new PrintStream(socket.getOutputStream());
+            // alert the server we are ready to talk
+            printStream.println();
             String fileName = bufferedReader.readLine();
-            int fileSize = bufferedReader.read();
-            downloadVideo(fileName, fileSize);
+
+            // Move to next part
+            printStream.println();
+            downloadVideo(fileName);
+
+            // Close our stuff
             socket.close();
+            printStream.close();
+            bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void downloadVideo(String fileName, int fileSize) throws IOException {
+    /**
+     * Take in bytes from our server, then write them to a file
+     * @param fileName
+     * @throws IOException
+     */
+    private void downloadVideo(String fileName) throws IOException {
 
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-        FileOutputStream fileOutputStream = new FileOutputStream("./nodeVideos/" + fileName);
-        byte[] info = new byte[4096];
 
-        int read;
-        int totalRead = 0;
-        int remaining = fileSize;
-        while((read = dataInputStream.read(info, 0, Math.min(info.length, remaining))) > 0) {
-            totalRead += read;
-            remaining -= read;
-            System.out.println("read " + totalRead + " bytes.");
-            fileOutputStream.write(info, 0, read);
-        }
+        // Get the bytes from the socket
+        byte[] data = dataInputStream.readAllBytes();
+        // Alert console
+        System.out.println("Downloading " +fileName);
 
-        dataInputStream.close();
+        // Create our output stream and write to the file
+        FileOutputStream fileOutputStream = new FileOutputStream("/home/multiojuice/VlocChain/Backend/nodeVideos/"+fileName);
+        fileOutputStream.write(data);
+        // Close and alert console
         fileOutputStream.close();
+        dataInputStream.close();
+        System.out.println("Downloaded");
     }
 }
