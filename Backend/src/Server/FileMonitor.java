@@ -36,10 +36,11 @@ public class FileMonitor implements Runnable{
             }
 
             try {
-                Thread.sleep(1);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
     }
 

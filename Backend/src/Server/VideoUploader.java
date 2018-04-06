@@ -4,12 +4,14 @@ package Server;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class VideoUploader implements Runnable {
 
     private File file;
     private Socket socket;
-
     public VideoUploader(File file, InetAddress addr) throws IOException {
         this.file = file;
         this.socket = new Socket(addr,6789);
@@ -19,17 +21,23 @@ public class VideoUploader implements Runnable {
     public void run() {
 
         PrintStream printStream = null;
-        try {
+        BufferedReader bufferedReader = null;
+        try{
+        bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             printStream = new PrintStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assert printStream != null;
-        printStream.println(Controller.NEW_VIDEO);
-        System.out.println(file.getName());
-        printStream.println(file.getName());
-        printStream.println((int)file.getTotalSpace());
+        try {
+            assert printStream != null;
+            printStream.println(Controller.NEW_VIDEO);
+            bufferedReader.readLine();
+            printStream.println(file.getName());
+            bufferedReader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             this.sendVideo();
@@ -41,22 +49,20 @@ public class VideoUploader implements Runnable {
 
     private void sendVideo() throws IOException {
 
-        FileInputStream fileInputStream = null;
-
+        byte[] data = null;
+        Path path = Paths.get(file.getPath());
         try {
-            fileInputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
+            data = Files.readAllBytes(path);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        byte[] info = new byte[4096];
+        dataOutputStream.write(data);
 
-        while(fileInputStream.read(info) > 0) dataOutputStream.write(info);
-
+        // get rid of the file
         file.delete();
-        fileInputStream.close();
-        dataOutputStream.close();
+        System.out.println("Uploaded");
 
     }
 }
