@@ -27,7 +27,7 @@ public class VideoDownloader implements Runnable{
 
     /**
      * The method to be ran when the thread is initialized
-     *  Communicate with the server, get intial info (file name)
+     *  Communicate with the server, get initial info (file name)
      *  Then it calls download files and closes all of our variables
      */
     @Override
@@ -62,10 +62,15 @@ public class VideoDownloader implements Runnable{
 
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 
+        // Get the bytes from the socket
         byte[] data = dataInputStream.readAllBytes();
+        // Alert console
         System.out.println("Downloading " +fileName);
+
+        // Create our output stream and write to the file
         FileOutputStream fileOutputStream = new FileOutputStream("/home/multiojuice/VlocChain/Backend/nodeVideos/"+fileName);
         fileOutputStream.write(data);
+        // Close and alert console
         fileOutputStream.close();
         dataInputStream.close();
         System.out.println("Downloaded");
