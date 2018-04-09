@@ -7,7 +7,6 @@ package Server;
  * distribute them across a network of video holders.
  * Then alert the holders on when to send up a connection
  */
-
 import Utils.IpObject;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -16,7 +15,6 @@ import java.net.Socket;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeSet;
-
 /**
  * Where the server socket is ran
  * creates a new client handler for all client sockets encountered
@@ -40,14 +38,14 @@ public class Controller {
         ipSet = new TreeSet<>(Comparator.comparingInt(IpObject::getVideoNumber));
 
         // Create our server socket to get connections
-        ServerSocket serverSocket = new ServerSocket(6790);
+        ServerSocket serverSocket = new ServerSocket(10000);
         // Alert the console
         System.out.println("Server Running");
 
         // Wait for at least one connection before we start sending files
         Socket clientSocket1 = serverSocket.accept();
         // Add the IP object to our data structures
-        IpObject ipObject1 = new IpObject(clientSocket1.getLocalAddress(),0);
+        IpObject ipObject1 = new IpObject(clientSocket1.getInetAddress(),0);
         ipSet.add(ipObject1);
         // Alert the console
         System.out.println("Connected to the first holder");
@@ -68,5 +66,3 @@ public class Controller {
         }
     }
 }
-
-

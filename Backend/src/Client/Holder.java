@@ -9,6 +9,7 @@ package Client;
 import Server.Controller;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -23,10 +24,10 @@ public class Holder {
 
     public static void main(String[] args) throws IOException {
 
-        Socket ControllerConnection = new Socket("localhost",6790);
+        Socket ControllerConnection = new Socket("129.21.49.139",10000);
 
         // This is the socket that will always be listening for new commands!
-        serverSocket = new ServerSocket(6789);
+        serverSocket = new ServerSocket(60999);
 
         // Always be monitoring
         while(true) {
@@ -52,7 +53,6 @@ public class Holder {
                     Recall recall = new Recall(socket);
                     Thread thread1 = new Thread(recall);
                     thread1.start();
-
                     break;
 
             }
