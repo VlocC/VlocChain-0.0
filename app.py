@@ -5,8 +5,9 @@ Filename: app.py
 """
 
 from flask import Flask
-from flaskext.mysql import MySQL
 from flask import request, session, render_template, redirect, flash, url_for
+from flask_sqlalchemy import SQLAlchemy
+from flask_uploads import UploadSet, configure_uploads
 from lxml import html
 from werkzeug.utils import secure_filename
 from video_class import Video
@@ -18,14 +19,21 @@ import random
 import user_class
 import os
 import operator
-import configdb
+import hashlib
+# import configdb
 node = Flask(__name__)
-node = configdb.opendb(node)
-mysql = MySQL(node)
-
+# node = configdb.opendb(node)
+# node.config['SQLALCHEMY_DATABASE_URI'] = configdb.opendb(node)
+node.config.from_pyfile('db.cfg')
+db = SQLAlchemy(node)
+from model import *
+videos = UploadSet('videos', ('mp4','webm','avi','mov'))
+# node.config['UPLOADED_FILES_DEST'] = 'newVideos'
+node.config['UPLOADS_DEFAULT_DEST'] = 'newVideos'
+configure_uploads(node, videos)
 UPLOAD_FOLDER = "./newVideos"
 ALLOWED_EXTENSIONS = set(["mp4", "avi", "webm"])
-node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 """
 All global variables
@@ -51,11 +59,10 @@ The home page of the website. If the user isn't logged in yet, it will bring the
 """
 @node.route('/', methods=['GET', 'POST'])
 def index():
-	if not session.get('logged'): #If the user is not logged in
-		return render_template('login.html')
-	else: #If the user is logged in
-		return render_template('hub.html')
-
+    if not session.get('logged'): #If the user is not logged in
+        return render_template('login.html')
+    else: #If the user is logged in
+        return render_template('hub.html')
 
 """
 The form from "login.html", sent when the user clicks the "submit" button
@@ -63,18 +70,16 @@ The form from "login.html", sent when the user clicks the "submit" button
 @node.route('/login', methods=['POST'])
 def check_user():
     if request.method == "POST":
-        session['logged'] = False
         usern = request.form['username']
-        pwd = request.form['password']
-        for user in users:
-            if user.username == usern: #If the user exists
-                if (users[user] == pwd):
-                    session['logged'] = True #Mark the user as "logged in"
-                    session['username'] = user.username
+        obj = db.session.query(User).filter_by(username=usern).first()
+        pwd = hashlib.sha256((request.form['password']).encode('ascii')).hexdigest()
+        if obj == None:
+            return redirect('/register')
+        else:
+            if obj.password == pwd:
+                return render_template('feed.html')
             else:
-                session['logged'] = False #Marks the user as "not logged in"
-        return redirect("/") #Reloads the index page with 'logged' marked as either "True" or "False"
-
+                return redirect('/register')
 
 """
 The webpage where videos can be exchanged between users
@@ -109,17 +114,17 @@ The form on the "register.html" page, that sends what the user typed in for user
 def send_register():
     if request.method == "POST":
         userr = request.form['username']
-        pwd = request.form['password']
-        rpwd = request.form['confirm_password']
+        pwd = hashlib.sha256((request.form['password']).encode('ascii')).hexdigest()
+        rpwd = hashlib.sha256((request.form['confirm_password']).encode('ascii')).hexdigest()
         mail_address = request.form['email']
-        if (pwd == "") or (pwd != rpwd) or (mail_address == ""):
-            return redirect("register")
-        if userr in users:
-            return render_template('register.html')
-        else:
-            new_user = user_class.User(userr, "", mail_address)
-            users[new_user] = pwd
+        if pwd == rpwd:
+            new_user = User(username=userr, first_name="Joe", last_name="DeGrand", email=mail_address, password=pwd)
+            db.session.add(new_user)
+            db.session.commit()
+            # mysql.execute("insert into info values('" + userr + "','" + "'test', 'testlast', '" + mail_address + "','" + pwd + "'")
             return redirect("/")
+        else:
+            return "The passwords didn't match!"
 
 """Returns user to login page after logging out of an account"""
 @node.route('/logout', methods=['POST'])
@@ -128,72 +133,23 @@ def logout():
     session['username'] = None
     return redirect("/")
 
-"""Home page for a user"""
-@node.route('/hub', methods=['POST'])
-def home():
-    """nothing"""
 
-"""Page for account settings and status"""
-@node.route('/my-account', methods=['POST'])
-def account():
-    return render_template('my-account.html')
-
-@node.route('/change-password', methods=['GET'])
-def change_password():
-    return render_template('change-password.html')
+@node.route('/upload', methods=['POST','GET'])
+def upload():
+    return render_template('upload.html')
 
 
-"""Form that checks the credentials to change the password of an existing user"""
-@node.route('/send-new-pass', methods=['GET', 'POST'])
-def send_new_pass():
-    user_conf = request.form.get('conf_user')
-    password_conf = request.form.get('conf_pass')
-    new_password = request.form.get('new_pass')
-    confirm_new = request.form.get('conf_new_pass')
-    for user in users:
-        if user.username == user_conf:
-            if users[user] == password_conf: #makes sure password is correct
-                if new_password == confirm_new: #confirms new password
-                    users[user] = new_password #changes password
-                    session['logged'] = False
-                    session['username'] = None
-                    return render_template('login.html')
-    #if anything is not correct, bring user back to change password page
-    return render_template('change-password.html')
-
-"""Page that displays popular videos of entire site"""
-@node.route('/popular-videos', methods=['POST'])
-def popular():
-    video_views = {}
-    sorted_videos = []
-    for video in videos:
-        video_views[video] = video.views
-    sorted_videos = sorted(video_views.items(), reverse=True, key=operator.itemgetter(1))
-    return render_template('popular-videos.html', videos = sorted_videos)
-
-
-"""Page that displays videos created/owned by signed in user"""
-@node.route('/my-videos', methods=['POST'])
-def own_videos():
-    return render_template('my-videos.html')
-
-
-"""Page that shows results for search bar"""
-@node.route('/search', methods=['POST'])
-def search():
-    search_string = request.form['search']
-    return render_template('search.html', search_string=search_string)
-
-"""Form that deletes a given account"""
-@node.route('/delete-account', methods=['GET'])
-def delete_account():
-    del_usern = session['username']
-    session['logged'] = False
-    for user in users:
-        if user.username == del_usern:
-            del users[user] ## remove user from user list
-            session['username'] = None
-    return render_template('login.html')
+@node.route('/upload_video', methods=['POST'])
+def upload_video():
+    if request.method == "POST":
+        title = request.form['title']
+        file = request.files['file']
+        filename = 'Fortnite.mp4'
+        file.save('./newVideos/' + filename)
+        #for file in request.files.getlist("upload"):
+            #filename = videos.save(request.files['media'])
+            #file.save('./newVideos')
+    return redirect('/upload')
 
 """This function is called when a user clicks on a video they want to watch"""
 @node.route('/<user><title>', methods=['POST'])
@@ -208,4 +164,3 @@ def method_not_allowed(error):
 if __name__ == "__main__":
 	node.secret_key = os.urandom(15)
 	node.run(host='0.0.0.0')
-
