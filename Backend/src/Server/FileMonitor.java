@@ -36,7 +36,7 @@ public class FileMonitor implements Runnable{
                 // Notify the console
                 System.out.println("Sending " + temp);
 
-                // Get the most availble holder
+                // Get the most available holder
                 IpObject ip = Controller.ipSet.first();
                 // Increment the videos current storage
                 ip.setVideoNumber();
