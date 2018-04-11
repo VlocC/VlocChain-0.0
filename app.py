@@ -177,10 +177,12 @@ def upload_video():
     return redirect('/upload')
 
 """This function is called when a user clicks on a video they want to watch"""
-@node.route('/<user><title>', methods=['POST'])
-def watch(user, title):
-    ##contact backend to pull video from holder 
-    return render_template('player.html', user=user, title=title)
+@node.route('/video/<user>/<video>', methods=['POST', 'GET'])
+def watch(user,video):
+
+    video_path = "/static/StreamingVideos/"+user+"/"+video+".mp4"
+
+    return render_template('player.html', video_path=video_path)
     
 @node.errorhandler(405) #bad url
 def method_not_allowed(error):

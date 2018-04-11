@@ -4,8 +4,7 @@ import Utils.IpObject;
 
 import java.io.File;
 import java.io.IOException;
-
-import static Server.Controller.videoMap;
+import java.sql.*;
 
 /**
  * @author Owen Sullivan
@@ -17,7 +16,7 @@ import static Server.Controller.videoMap;
 public class FileMonitor implements Runnable{
 
     // The directory to search
-    public static final String DIRECTORY = "/home/multiojuice/VlocChain/newVideos/";
+    public static final String DIRECTORY = "/home/vlocc/VlocChain/newVideos/";
 
 
     /**
@@ -37,21 +36,36 @@ public class FileMonitor implements Runnable{
                 System.out.println("Sending " + temp);
 
                 // Get the most availble holder
-                IpObject ip = Controller.ipSet.first();
-                // Increment the videos current storage
-                ip.setVideoNumber();
                 VideoUploader videoUploader = null;
+		String IP_location;
+		try {
+	            String query = "SELECT * FROM location_storage WHERE storage_amount =  ( SELECT MIN(storage_amount) FROM location_storage )";
+	            Statement st = Controller.conn.createStatement();
+	            ResultSet rs = st.executeQuery(query);
+	            rs.next();
+	            IP_location = rs.getString("IP_location");
+	            int storage_amount = rs.getInt("storage_amount");
+	            System.out.println(IP_location + " : " + storage_amount);
 
-                try {
+	            st.close();	
+
+                    // Increment the videos current storage
+
                     // Start a thread to deal with the new video
-                    videoUploader = new VideoUploader(temp,ip.getAddr());
+                    videoUploader = new VideoUploader(temp, IP_location.substring(1));
                     // Track where this video is put,
                     // TODO put this into a database
-                    videoMap.put(temp.getName(),ip.getAddr());
-                } catch (IOException e) {
+		    Statement st1 = Controller.conn.createStatement();
+		    String query1 = "INSERT INTO video_locations (video_name,IP_location) VALUES ('" +
+			   temp.getName()
+			   + "', '"
+			   + IP_location 
+			   + "' );";
+		    st1.executeUpdate(query1);
+
+                } catch (IOException | SQLException e) {
                     e.printStackTrace();
                 }
-
                 // Run the new thread
                 Thread thread = new Thread(videoUploader);
                 thread.start();
@@ -63,7 +77,6 @@ public class FileMonitor implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
 

@@ -29,9 +29,9 @@ public class VideoUploader implements Runnable {
      * @param addr the Ip of the holder
      * @throws IOException due to the new Socket
      */
-    public VideoUploader(File file, InetAddress addr) throws IOException {
+    public VideoUploader(File file, String addr) throws IOException {
         this.file = file;
-        this.socket = new Socket(addr,6789);
+        this.socket = new Socket(InetAddress.getByName(addr),60999);
     }
 
 
@@ -103,6 +103,5 @@ public class VideoUploader implements Runnable {
         file.delete();
         dataOutputStream.close();
         System.out.println("Uploaded");
-
     }
 }
