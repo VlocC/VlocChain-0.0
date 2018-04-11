@@ -1,11 +1,11 @@
 from sqlalchemy import Column, String, Integer
-from app import db
+from app import db, UserMixin
 
 """
 The information for the tables to add to our interface
 Author: Joe DeGrand
 """
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'info'
     id = Column(Integer, primary_key=True)
     username = Column(String(20), unique=True, nullable=False)

@@ -8,6 +8,13 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
+	 $(document).ready(function() {
+		$("#signout").click(function() { 
+                                        window.location.href = "/logout"; 
+ 
+                }); 
+	});
+	
 	</script>
 
 
@@ -74,7 +81,7 @@ body{
 	<ul class="dropdown-menu dropdown-menu-right text-left">
 		<a class="dropdown-item" href='#'>My Profile</a>
 		<div class="dropdown-divider"></div>
-		<a class="dropdown-item" href='#'>Sign Out</a>
+		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>
 </nav>

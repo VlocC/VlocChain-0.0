@@ -8,6 +8,7 @@ from flask import Flask
 from flask import request, session, render_template, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, configure_uploads
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from lxml import html
 from werkzeug.utils import secure_filename
 from video_class import Video
@@ -20,6 +21,7 @@ import user_class
 import os
 import operator
 import hashlib
+
 # import configdb
 node = Flask(__name__)
 # node = configdb.opendb(node)
@@ -34,6 +36,9 @@ configure_uploads(node, videos)
 UPLOAD_FOLDER = "./newVideos"
 ALLOWED_EXTENSIONS = set(["mp4", "avi", "webm"])
 #node.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+login_manager = LoginManager()
+login_manager.init_app(node)
+
 
 """
 All global variables
@@ -59,10 +64,11 @@ The home page of the website. If the user isn't logged in yet, it will bring the
 """
 @node.route('/', methods=['GET', 'POST'])
 def index():
-    if not session.get('logged'): #If the user is not logged in
-        return render_template('login.html')
+    # if not session.get('logged'): #If the user is not logged in
+    if current_user.is_authenticated:
+        return redirect('/home')
     else: #If the user is logged in
-        return render_template('hub.html')
+        return render_template('login.html')
 
 """
 The form from "login.html", sent when the user clicks the "submit" button
@@ -77,9 +83,20 @@ def check_user():
             return redirect('/register')
         else:
             if obj.password == pwd:
-                return render_template('feed.html')
+                login_user(obj)
+                return redirect('/home')
             else:
                 return redirect('/register')
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@node.route('/home', methods=['GET', 'POST'])
+@login_required
+def feed():
+    return render_template('feed.html')
 
 """
 The webpage where videos can be exchanged between users
@@ -127,24 +144,32 @@ def send_register():
             return "The passwords didn't match!"
 
 """Returns user to login page after logging out of an account"""
-@node.route('/logout', methods=['POST'])
+@node.route('/logout', methods=['POST','GET'])
+@login_required
 def logout():
-    session['logged'] = False
-    session['username'] = None
+    logout_user()
+    # return json.dumps({'logging_out':'OK'})
     return redirect("/")
+    # session['logged'] = False
+    # session['username'] = None
+    # return redirect("/")
 
 
 @node.route('/upload', methods=['POST','GET'])
+@login_required
 def upload():
     return render_template('upload.html')
 
 
 @node.route('/upload_video', methods=['POST'])
+@login_required
 def upload_video():
     if request.method == "POST":
         title = request.form['title']
         file = request.files['file']
-        filename = 'Fortnite.mp4'
+        ofilename = file.filename
+        ext = ofilename.split('.')
+        filename = title + '.' + ext[1]
         file.save('./newVideos/' + filename)
         #for file in request.files.getlist("upload"):
             #filename = videos.save(request.files['media'])

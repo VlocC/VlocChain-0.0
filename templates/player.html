@@ -87,6 +87,10 @@
 				}
 				vid[0].currentTime = vid[0].duration * percentage / 100;
 			};
+			$("#signout").click(function() {
+                                        window.location.href = "/logout";
+
+                        }); 
 		});
 	</script>
 	<head>
@@ -258,7 +262,7 @@ img {
 	<ul class="dropdown-menu dropdown-menu-right text-left">
 		<a class="dropdown-item" href='#'>My Profile</a>
 		<div class="dropdown-divider"></div>
-		<a class="dropdown-item" href='#'>Sign Out</a>
+		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>
 </nav>
