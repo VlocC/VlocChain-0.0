@@ -26,7 +26,7 @@ import hashlib
 node = Flask(__name__)
 # node = configdb.opendb(node)
 # node.config['SQLALCHEMY_DATABASE_URI'] = configdb.opendb(node)
-node.config.from_pyfile('db.cfg')
+# node.config.from_pyfile('db.cfg')
 db = SQLAlchemy(node)
 from model import *
 videos = UploadSet('videos', ('mp4','webm','avi','mov'))
@@ -96,7 +96,8 @@ def load_user(user_id):
 @node.route('/home', methods=['GET', 'POST'])
 @login_required
 def feed():
-    return render_template('feed.html')
+    current_user = current_user.get_id() 
+    return render_template('feed.html', current_user=current_user)
 
 """
 The webpage where videos can be exchanged between users
@@ -183,7 +184,11 @@ def watch(user,video):
     video_path = "/static/StreamingVideos/"+user+"/"+video+".mp4"
 
     return render_template('player.html', video_path=video_path)
-    
+
+@node.route('/profile/<user>', methods=['POST','GET'])
+def profile(user):
+    return render_template('user-account.html', user=user)
+
 @node.errorhandler(405) #bad url
 def method_not_allowed(error):
     return render_template('error.html') #send to login page

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			$(".boxes").css({
+				'height': 
+				($(".content").height()/3 + 'px')
+			});
+			$(".boxes").css({
+				'width': 
+				($(".boxes").height()/10*16 + 'px')
+			});
+			$(".thumbnail").css({
+				'width': 
+				($(".boxes").height()*1 + 'px')
+			});
+			$(".thumbnail").css({
+				'height': 
+				($(".thumbnail").width()/16*10 + 'px')
+			});
+			$(".thumbnail").each(function() {
+				$(this).html('<img src="test.jpg"><a>Title</a>');
+			});	
+	</script>
+	<head>
+	<style type="text/css">
+		body{
+			height:100vh;
+			width:100%;
+			background-color: rgb(36, 46, 62);
+			z-index:2;
+		}
+		.window {
+			border-top:30px;
+		}
+		.thumbnail {
+			margin-top:20px;
+		}
+		.sidenav {
+			height:100%;
+			width:0;
+			top:30px;
+			position:fixed;
+			z-index: 2;
+			top:56px;
+			left:0;
+			background-color: #13496d;
+			overflow-x:hidden;
+			white-space:nowrap;
+			transition:0.5s;
+			padding-top:60px;
+		}
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none;
+			font-size: 32px;
+			position:relative;
+			color: #818181;
+			display: block;
+			transition: 0.3s;
+		}
+		.sidenav a:hover {
+			color: white;
+		}
+		.sidenav .closebtn {
+			position: absolute;
+			top: 0;
+			right: 25px;
+			font-size: 36px;
+			font-color: #000000;
+			margin-left: 50px;
+		}
+		.openbtn-side {
+			margin-left:5px;
+			margin-top:10px;
+			font-size:35px;
+			position:fixed;
+			cursor:pointer;
+			color:rgb(200,200,200);
+			z-index:3;
+		}
+		.settings-nav {
+			height:100%;
+			width:0;
+			top:56px;
+			left:0px;
+			position:fixed;
+			transition: 0.5s;
+			background-color: rgb(100,100,150);
+			z-index:1;
+		}
+		.settings-nav .closebtn {
+			position:absolute;
+			top:0;
+			right:25px;
+			margin-left: 98%;
+			font-size:36px;
+			color:#000000;
+			z-index:1;
+		}
+		.main {
+			transition: margin-left .5s;
+			padding: 20px;
+		}
+		.header-container {
+			float:left;
+			width:25%;
+		}
+		.pref-nav {
+			height: 100%;
+			width: 0;
+			top:56px;
+			left:0px;
+			position: fixed;
+			transition: 0.5s;
+			background-color:rgb(50,100,100);
+			z-index:1;
+		}
+		.pref-nav .closebtn {
+			position:absolute;
+			top:0;
+			right:25px;
+			margin-left: 98%;
+			font-size:36px;
+			color:#000000;
+			z-index:1;
+			
+		}
+	</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-light bg-light" id="navigate">
+			<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">VlocChain - {{ user }}</a>
+			</div>
+			<ul class="nav navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="navbar-brand" href="#" onclick="openAccountSettings()">Account Settings</a>
+					<a class="navbar-brand" href="#" onclick="openPref()" >Preferences</a>
+					<a class="navbar-brand" href="#">Followers</a>
+					<a class="navbar-brand" href="#">Following</a>
+				</li>
+			</ul>
+			</div>
+		</nav>
+		<div id="left-side-bar" class="sidenav">
+			<a href="javascript:void(0)"class="closebtn" onclick="closeSideBar()">&times;</a> <hr>
+			<a href="#">Home </a> <hr>
+			<a href="#">Liked Videos </a> <hr>
+			<a href="#">Favorites </a> <hr>
+			<a href="#">Messages </a> <hr>
+		</div>
+
+		<div id="account-settings-bar" class="settings-nav">
+			<a id="acc-close-btn" href="javascript:void(0)"class="closebtn" onclick="closeAccountSettings()">&times;</a>
+		<span class="openbtn-side" onclick="openSideBar()">&#9776;</span>
+		</div>
+		<div id="pref-bar" class="pref-nav">
+			<a id="pref-close-btn" href="javascript:void(0)"class="closebtn" onclick="closePref()">&times;</a>
+		</div>
+	<script>
+	function openSideBar() {
+		document.getElementById("left-side-bar").style.width = "250px";
+		document.getElementById("main").style.position = "relative"
+		document.getElementById("main").style.marginLeft = "250px";
+		document.getElementById("account-settings-bar").style.left = "250px";
+	}
+	function closeSideBar() {
+		document.getElementById("left-side-bar").style.width = "0";
+		document.getElementById("main").style.position = "relative"
+		document.getElementById("main").style.marginLeft = "0";
+		document.getElementById("account-settings-bar").style.left = "0px";
+	}
+	function openAccountSettings() {
+		document.getElementById("account-settings-bar").style.width="100%"
+		document.getElementById("main").style.position="fixed"
+		closePref();
+	}
+	function closeAccountSettings() {
+		document.getElementById("account-settings-bar").style.width="0"
+	}
+	function openPref() {
+		closeAccountSettings();
+		document.getElementById("pref-bar").style.width="100%"
+		document.getElementById("main").style.position="fixed"
+	}
+	function closePref() {
+		document.getElementById("pref-bar").style.width="0"
+	}
+	</script>
+	</body>
+</html>

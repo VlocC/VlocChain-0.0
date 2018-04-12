@@ -35,7 +35,12 @@
 					window.location.href = "/logout";
 
 			});
+			$("#profile").click(function() {
+				window.location.href = {{directory}};
 		});
+	</script>
+	<script type="text/javascript">
+		var directory = "/profile/".concat({{current_user}});
 	</script>
 	<head>
 	<style type="text/css">
@@ -110,14 +115,14 @@ img {
 <nav class="navbar navbar-light bg-light" id="navigate">
 	<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" href="#">VlocC</a>
+			<a class="nav-link" href="#">VlocChain - {{current_user}}</a>
 		</li>
 	</ul>
 
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">
-		<a class="dropdown-item" href='#'>My Profile</a>
+		<a class="dropdown-item" id = "profile" href='#'>My Profile</a>
 		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>
