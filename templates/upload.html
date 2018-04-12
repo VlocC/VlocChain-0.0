@@ -8,9 +8,31 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
+	 $(document).ready(function() {
+		$("#signout").click(function() { 
+            window.location.href = "/logout"; 
+        });
+		$("#upload").click(function() {
+			window.location.href = "/upload";
+		});
+		$("#text").click(function() {
+			window.location.href = "/";
+		});
+        document.getElementById('thumbnail').addEventListener('change',changeBG, true);
+        function changeBG() {
+        	var upload = document.getElementById('thumbnail').files[0];
+        	var filereader = new FileReader();
+        	filereader.onloadend = function() {
+        		document.getElementById('changeme').style.backgroundImage = "url(" + filereader.result + ")";
+        	}
+        	if (upload){
+        		filereader.readAsDataURL(upload);
+        	} else {
+        	}
+        }
+	});
+	
 	</script>
-
-
 	<style type="text/css">
 body{
 	height:100vh;
@@ -18,9 +40,7 @@ body{
 	background-attachment: fixed;
 	background-size: cover;
 	background-repeat: no-repeat;
-	/*background-color: rgb(36, 46, 62);*/
 	background: linear-gradient(to right, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29)
-	/*overflow: hidden;*/
 }
 .window {
 	border-top:30px;
@@ -28,15 +48,41 @@ body{
 .content {
 	margin-left: 5%;
 	margin-right: 5%;
-	/*top: 25%;*/
 	top: 10%;
 	height: 80%;
 	width: 90%;
-	background-color: green;
 	display: flex;
 	position: fixed;
 	z-index: 1;
-	overflow: hidden;
+}
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+.pageText {
+	color: white;
+	font-size: 50px;
+	font-family: "Lucida Console";
+	position: absolute;
+}
+.forms {
+	margin-top: 150px;
+}
+.preview {
+	position: relative;
+	left: 60%;
+	top: 275px;
+	width: 35%;
+	height: 19.68%;
+}
+.ratio {
+	padding-top: 56.25%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100%;
+	width: 100%;
 }
 #navigate {
 	position: fixed;
@@ -50,7 +96,6 @@ body{
 	transition-timing: ease-in-out;
 }
 #navigate:hover  {
-	/*background-color: white;*/
 	background-position: 0 -100%;
 	color: black;
 }
@@ -58,8 +103,11 @@ body{
 	color: black;
 }
 #center {
-	margin: 0 auto;
-	float: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	text-align: center;
 }
 </style>
 	<body>
@@ -69,24 +117,51 @@ body{
 			<a class="nav-link" id="text" href="#">VlocC</a>
 		</li>
 	</ul>
+	<button class="btn btn-outline-primary navbar-btn" style="margin-right: 2%;" id="upload">Upload</button>
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">
 		<a class="dropdown-item" href='#'>My Profile</a>
 		<div class="dropdown-divider"></div>
-		<a class="dropdown-item" href='#'>Sign Out</a>
+		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>
 </nav>
 <div class="content">
-
-<form method=POST enctype=multipart/form-data action="/upload_video">
-	<input type="text" class="form-control" name="title" placeholder="Title">
-	<div class="file-loading">
-    <input id="input-folder-1" type="file" name="file" webkitdirectory>
+	<div class="pageText" id="center">
+		Upload A Video!
 	</div>
-    <input type="submit" class="btn btn-outline-light" name="upload" value="Upload">
+<form method="POST" enctype="multipart/form-data" style="width: 70%;" action="/upload_video">
+	<div class="forms" id="center">
+	<div class="form-group row h-5 justify-content-center">
+		<div class="col-sm-15" style="width: 50%;">
+			<input type="text" class="form-control" name="title" placeholder="Title">
+		</div>
+	</div>	
+	<div class="form-group row h-10 justify-content-center">
+		<div class="col-sm-100" style="width: 50%;">
+			<textarea rows="5" class="form-control" name="description" placeholder="Description"></textarea>
+		</div>
+	</div>
+	<div class="file-loading">
+		<label class="btn btn-danger btn-block" id="center" style="width: 50%;">
+    		Browse For Thumbnail <input type="file" id="thumbnail" name="picture_file" hidden>
+		</label>
+		<label class="btn btn-primary btn-block" id="center" style="width: 50%;">
+    		Browse For Video <input type="file" name="video_file" hidden>
+		</label>
+	</div>
+	<div class="form-group row h-10 justify-content-center">
+		<div class="col-sm-5">
+			<input type="submit" id="center" class="btn btn-outline-light" name="upload" value="Upload">
+		</div>
+	</div>
+</div>
 </form>
+</div>
+<div class="preview">
+	<div class="ratio" id="changeme">
+	</div>
 </div>
 	</body>
 </html>

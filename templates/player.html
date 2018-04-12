@@ -17,7 +17,7 @@
 				$('.duration').text(durmin + ":" + dursec);
 			});
 			vid.on('timeupdate', function() {
-				var curr = vid[0].currentTime /1 00;
+				var curr = vid[0].currentTime /100;
 				var totalDur = vid[0].duration;
 				var percentage = 100 * curr * 100 / totalDur;
 				var currmin = curr.toString().split('.')[0];
@@ -87,6 +87,17 @@
 				}
 				vid[0].currentTime = vid[0].duration * percentage / 100;
 			};
+			$("#signout").click(function() {
+                window.location.href = "/logout";
+
+            });
+			$("#upload").click(function() {
+					window.location.href = "/upload";
+
+			});
+			$("#vlocc").click(function() {
+					window.location.href = "/";
+			});
 		});
 	</script>
 	<head>
@@ -204,10 +215,10 @@ img {
 	z-index: 101;
 }
 .pause {
-	background-image: url("src/pause_control.png");
+	background-image: url("/static/src/pause_control.png");
 }
 .play {
-	background-image: url("src/play_button.png");
+	background-image: url("/static/src/play_button.png");
 }
 .time {
 	color: white;
@@ -240,30 +251,31 @@ img {
 	z-index: 101;
 	background-repeat: no-repeat;
 	background-size: contain;
-	background-image: url("src/expand.png");
+	background-image: url("/static/src/expand.png");
 	display: inline;
 }
 </style>
 </head>
-
 <body>
 <nav class="navbar navbar-light" style="background-color: none;" id="navigate">
 	<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" id="text" href="#">VlocC</a>
+			<a class="nav-link" href='#' id="text">VlocC</a>
 		</li>
 	</ul>
+	<button class="btn btn-outline-primary navbar-btn" style="margin-right: 2%;" id="upload">Upload</button>
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">
 		<a class="dropdown-item" href='#'>My Profile</a>
 		<div class="dropdown-divider"></div>
-		<a class="dropdown-item" href='#'>Sign Out</a>
+		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>
 </nav>
+	
 	<div class="player">
-		<video class="vid" id="vide" src="author-title.mov" autoplay>
+		<video class="vid" id="vide" src= {{ video_path }}  autoplay>
 		</video>
 		<div class="controls">
 			<div class="scrubber">

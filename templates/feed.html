@@ -3,10 +3,11 @@
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+	<script type="text/javascript">
+		var directory = "/profile/".concat("{{current_user}}");
+	</script>
 	<script type="text/javascript">
 		$(document).ready(function() { 
 			$(".boxes").css({
@@ -25,14 +26,27 @@
 				'height': 
 				($(".thumbnail").width()/16*10 + 'px')
 			});
-			$(".thumbnail").each(function() {
-				$(this).html('<img src="test.jpg"><a>Title</a>');
-				// $(".thumbnail").css({
-				// 	'background-image':
-				// 	'test.jpg'
-				// });
+			/*fun*/
+			$("#signout").click(function() {
+					window.location.href = "/logout";
+
 			});
+			$("#upload").click(function() {
+					window.location.href = "/upload";
+
+			});
+			$("#text").click(function() {
+					window.location.href = "/";
+			});
+			$("#profile").click(function() {
+				window.location.href = directory;
+			});
+
 		});
+		function watch_video(creator, title) {
+			var location = "/video/" + creator + "/" + title
+			window.location.href = location
+		}
 	</script>
 	<head>
 	<style type="text/css">
@@ -42,8 +56,9 @@
 			background-attachment: fixed;
 			background-size: cover;
 			background-repeat: no-repeat;
-			background-color: rgb(36, 46, 62);
-			/*overflow: hidden;*/
+			background: -webkit-linear-gradient(left, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29);
+			background: -o-linear-gradient(left, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29);
+			background: linear-gradient(to right, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29);
 		}
 		.window {
 	border-top:30px;
@@ -107,30 +122,31 @@ img {
 <nav class="navbar navbar-light bg-light" id="navigate">
 	<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" href="#">VlocC</a>
+			<a class="nav-link" href='#' id="text">VlocC - {{current_user}}</a>
 		</li>
 	</ul>
-
+	<button class="btn btn-outline-primary navbar-btn" style="margin-right: 2%;" id="upload">Upload</button>
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">
-		<a class="dropdown-item" href='#'>My Profile</a>
-		<a class="dropdown-item" href='#'>Sign Out</a>
+		<a class="dropdown-item" href='#' id="profile">My Profile</a>
+		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>
 </nav>
 <div class="content">
 	<div class="container-fluid">
 	<div class="row" align="center">
-		<div class="boxes" id="center">
-			<div class="thumbnail"></div>
-		</div>
-		<div class="boxes" id="center">
-			<div class="thumbnail"></div>
-		</div>
-		<div class="boxes" id="center">
-			<div class="thumbnail"></div>
-		</div>
+		{% for video in vid_list %}
+			<div class="boxes" id="center">
+				<div class="thumbnail" onclick=watch_video("{{video.creator}}","{{video.title}}")>
+					<img src={{"/static/thumbnails/" + video.creator + "-" + video.title + ".jpg"}}>
+					<a>{{video.title}}</a>
+					</br>
+					<a>{{video.creator}}</a>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 	</div>
 </div>
