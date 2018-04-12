@@ -47,7 +47,7 @@ public class VideoUploader implements Runnable {
         PrintStream printStream = null;
         BufferedReader bufferedReader = null;
         try{
-        bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             printStream = new PrintStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,10 +94,13 @@ public class VideoUploader implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+	System.out.println("read the files bytes");
         // Create the output stream to send it through
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        // Simply write it to the socket
+        // Simply write it to the socke
+	System.out.println("Got the output stream");
         dataOutputStream.write(data);
+	System.out.println("Sent the data");
 
         // Delete the file, now that it is stored else where
         file.delete();

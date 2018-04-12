@@ -70,6 +70,10 @@ public class Controller {
         Thread monitorThread = new Thread(fileMonitor);
         monitorThread.start();
 
+	RecallMonitor recallMonitor = new RecallMonitor();
+	Thread recallThread = new Thread(recallMonitor);
+	recallThread.start();
+
         // Keep connecting to new holders
         while(true) { // Loop and look for new connections
             // Accept a new connection
@@ -80,7 +84,6 @@ public class Controller {
 		+ "VALUES ( '" 
 		+ clientSocket.getInetAddress()
 		+ "' , 0)";
-
 	    try {
 	    stmt.executeUpdate(sqlStatement);	
 	    System.out.println("New Connection stored in DB");
