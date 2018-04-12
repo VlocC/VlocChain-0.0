@@ -24,18 +24,24 @@
 				'height': 
 				($(".thumbnail").width()/16*10 + 'px')
 			});
-			$(".thumbnail").each(function() {
+			/*$(".thumbnail").each(function() {
 				$(this).html('<img src="test.jpg"><a>Title</a>');
 				// $(".thumbnail").css({
 				// 	'background-image':
 				// 	'test.jpg'
 				// });
 			});
+			*/
+			/*fun*/
 			$("#signout").click(function() {
 					window.location.href = "/logout";
 
 			});
 		});
+		function watch_video(creator, title) {
+			var location = "/video/" + creator + "/" + title
+			window.location.href = location
+		}
 	</script>
 	<head>
 	<style type="text/css">
@@ -125,15 +131,16 @@ img {
 <div class="content">
 	<div class="container-fluid">
 	<div class="row" align="center">
-		<div class="boxes" id="center">
-			<div class="thumbnail"></div>
-		</div>
-		<div class="boxes" id="center">
-			<div class="thumbnail"></div>
-		</div>
-		<div class="boxes" id="center">
-			<div class="thumbnail"></div>
-		</div>
+		{% for video in vid_list %}
+			<div class="boxes" id="center">
+				<div class="thumbnail" onclick=watch_video("{{video.creator}}","{{video.title}}")>
+					<img src={{"/static/thumbnails/" + video.creator + "-" + video.title + ".jpg"}}>
+					<a>{{video.title}}</a>
+					</br>
+					<a>{{video.creator}}</a>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 	</div>
 </div>
