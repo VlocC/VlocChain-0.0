@@ -1,34 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			$(".boxes").css({
+				'height': 
+				($(".content").height()/3 + 'px')
+			});
+			$(".boxes").css({
+				'width': 
+				($(".boxes").height()/10*16 + 'px')
+			});
+			$(".thumbnail").css({
+				'width': 
+				($(".boxes").height()*1 + 'px')
+			});
+			$(".thumbnail").css({
+				'height': 
+				($(".thumbnail").width()/16*10 + 'px')
+			});
+			$(".thumbnail").each(function() {
+				$(this).html('<img src="test.jpg"><a>Title</a>');
+			});	
+	</script>
 	<head>
-		<style>
-			body{
+	<style type="text/css">
+		body{
 			height:100vh;
 			width:100%;
-			background-color:pink;
+			background-color: rgb(36, 46, 62);
 		}
 		.window {
 			border-top:30px;
 		}
-		</style>
+		.sidenav {
+			height:100%;
+			width:0;
+			position:fixed;
+			z-index: 1;
+			top:0;
+			left:0;
+			background-color: #13496d;
+			overflow-x:hidden;
+			transition:0.5s;
+			padding-top:60px;
+		}
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none;
+			font-size: 32px;
+			color: #818181;
+			display: block;
+			transition: 0.3s;
+		}
+		.sidenav a:hover {
+			color: white;
+		}
+		.sidenav .closebtn {
+			position: absolute;
+			top: 0;
+			right: 25px;
+			font-size: 36px;
+			font-color: rgb(0,0,0);
+			margin-left: 50px;
+		}
+		.openbtn {
+			margin-left:5px;
+			margin-top:10px;
+			font-size:35px;
+			position:absolute;
+			cursor:pointer;
+			color:rgb(200,200,200);
+		}
+		.main {
+			transition: margin-left .5s;
+			padding: 20px;
+		}
+	</style>
 	</head>
-		
 	<body>
-		<h1>
-			My Account...
-		</h1>
-		<br>
-		<div class="window" align="left">
-			<form action="/sendvideo" method="GET">
-				<input type="submit" name="send" value="Upload a File">
-			</form> <br><br>
-			<form action="/change-password" method="GET">
-				<input type="submit" name="change_pass" value="Change Password">
-			</form>
-			<br><br>
-			<form action="/delete-account" method="GET">
-				<input type="submit" name="delete_acct" value="Delete Account">	
-			</form>
+		<nav class="navbar navbar-light bg-light" id="navigate">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="#"> VlocChain </a>
+				</li>
+			</ul>
+		</nav>
+		<div id="left-side-bar" class="sidenav">
+			<a href="javascript:void(0)"class="closebtn" onclick="closeSideBar()">&times;<a>
+			<a href="#">Link 1 </a>
+			<a href="#">Link 2 </a>
+			<a href="#">Link 3 </a>
 		</div>
+		<div id="main">
+			
+		</div>
+		<span class="openbtn" onclick="openSideBar()">&#9776;</span>
+	<script>
+	function openSideBar() {
+		document.getElementById("left-side-bar").style.width = "250px";
+		document.getElementById("main").style.marginLeft = "250px";
+	}
+	function closeSideBar() {
+		document.getElementById("left-side-bar").style.width = "0";
+		document.getElementById("main").style.marginLeft = "0";
+	}
+	</script>
 	</body>
 </html>
