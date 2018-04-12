@@ -9,6 +9,7 @@ package Client;
 import Server.Controller;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -20,14 +21,14 @@ import java.net.Socket;
 public class Holder {
 
     public static ServerSocket serverSocket;
+    public static final String DOWNLOAD_DIRECTORY = "/home/multiojuice/VlocChain/Backend/nodeVideos/";
 
     public static void main(String[] args) throws IOException {
 
-        Socket ControllerConnection = new Socket("localhost",6790);
+        Socket ControllerConnection = new Socket("129.21.49.139",10000);
 
         // This is the socket that will always be listening for new commands!
-        serverSocket = new ServerSocket(6789);
-
+        serverSocket = new ServerSocket(60999);
         // Always be monitoring
         while(true) {
 
@@ -36,7 +37,6 @@ public class Holder {
             // Read in the new command
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String command = bufferedReader.readLine();
-
             // Depending oon the command, make a new thread to deal with the command
             switch (command) {
                 // If we need to download a new video to store
@@ -44,7 +44,6 @@ public class Holder {
                     VideoDownloader videoDownloader = new VideoDownloader(socket);
                     Thread thread = new Thread(videoDownloader);
                     thread.start();
-
                     break;
 
                 // If we need to send a video back up to the webpage
@@ -52,12 +51,9 @@ public class Holder {
                     Recall recall = new Recall(socket);
                     Thread thread1 = new Thread(recall);
                     thread1.start();
-
                     break;
 
             }
-
         }
-
     }
 }

@@ -24,6 +24,11 @@ This folder of files works with each other to move and host the videos that can 
 2. Network Sockets
 3. MySQL & MariaDB
 
+In addition to these, to actually run the java I needed to add
+```
+export _JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
+```
+to my .bashrc. This made it possible to bind my java ServerSocket to IPv4.
 ### Joining the Network
 
 

@@ -31,6 +31,7 @@ public class VideoUploader implements Runnable {
      */
     public VideoUploader(File file, String addr) throws IOException {
         this.file = file;
+
         this.socket = new Socket(InetAddress.getByName(addr),60999);
     }
 

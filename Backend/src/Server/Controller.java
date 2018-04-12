@@ -1,12 +1,4 @@
 package Server;
-/**
- * @author Owen Sullivan @multiojuice
- * @file Server.Controller
- * This is going to be ran in parralel with our flask
- * app. This is going to take the uploaded videos and
- * distribute them across a network of video holders.
- * Then alert the holders on when to send up a connection
- */
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -21,7 +13,7 @@ import java.sql.*;
  */
 public class Controller {
 
-    // Standardized messages to comunicate between controller and holder
+    // Standardized messages to communicate between controller and holder
     public static final String NEW_VIDEO = "new_video";
     public static final String RECALL = "recall";
     
@@ -29,71 +21,68 @@ public class Controller {
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver"; 
     static final String DB_URL = "jdbc:mariadb://localhost/users";
     static final String USER = "root";
-    static final String PASS = "brickhack4";
+    static final String PASS = "";
     public static Connection conn;
-
+  
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException{
+
+
 
         // Create our server socket to get connections
         ServerSocket serverSocket = new ServerSocket(10000);
         // Alert the console
         System.out.println("Server Running");
 
-	// Connect To Database
-	Class.forName(JDBC_DRIVER);
-	conn = DriverManager.getConnection(DB_URL, USER, PASS);
-	System.out.println("Connected to DB");	
+        // Connect To Database
+        Class.forName(JDBC_DRIVER);
+        conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        System.out.println("Connected to DB");
 
-        // Wait for at least one connectin before we start sending files
+        // Wait for at least one connection before we start sending files
         Socket clientSocket1 = serverSocket.accept();
-        // Add the IP object to our data structures
-	Statement stmt = conn.createStatement();
 
-	String sqlStatement = "INSERT INTO location_storage (IP_location, storage_amount) "
-		+ "VALUES ( '" 
-		+ clientSocket1.getInetAddress()
-		+ "' , 0)";
+        Statement stmt =conn.createStatement();
 
-	try {
-	    stmt.executeUpdate(sqlStatement);	
-	    System.out.println(sqlStatement);
+        String sqlStatement = "INSERT INTO location_storage (IP_location, storage_amount) "
+                + "VALUES ( '"
+                + clientSocket1.getInetAddress()
+                + "' , 0)";
+        try {
+            stmt.executeUpdate(sqlStatement);
+            System.out.println(sqlStatement);
             System.out.println("Connected to the first holder");
-	    
-	} catch (SQLIntegrityConstraintViolationException dup){
-		
-	    System.out.println("Pre-exisisting Ip has Returned!");
-	    
-	}
+
+        } catch (SQLIntegrityConstraintViolationException dup){
+            System.out.println("Pre-existing Ip has Returned!");
+        }
 
         // Create the FileMonitor
         FileMonitor fileMonitor = new FileMonitor();
         Thread monitorThread = new Thread(fileMonitor);
         monitorThread.start();
 
-	RecallMonitor recallMonitor = new RecallMonitor();
-	Thread recallThread = new Thread(recallMonitor);
-	recallThread.start();
+	      RecallMonitor recallMonitor = new RecallMonitor();
+	      Thread recallThread = new Thread(recallMonitor);
+	      recallThread.start();
 
         // Keep connecting to new holders
         while(true) { // Loop and look for new connections
             // Accept a new connection
             Socket clientSocket = serverSocket.accept();
+
             stmt = conn.createStatement();
 
-	    sqlStatement = "INSERT INTO location_storage (IP_location, storage_amount) "
-		+ "VALUES ( '" 
-		+ clientSocket.getInetAddress()
-		+ "' , 0)";
-	    try {
-	    stmt.executeUpdate(sqlStatement);	
-	    System.out.println("New Connection stored in DB");
+            sqlStatement = "INSERT INTO location_storage (IP_location, storage_amount) "
+            + "VALUES ( '"
+            + clientSocket.getInetAddress()
+            + "' , 0)";
 
-	    } catch (SQLIntegrityConstraintViolationException dup){
-   	        System.out.println("Pre-exisisting Ip has Returned!");
-	    }
+        try {
+            stmt.executeUpdate(sqlStatement);
+            System.out.println("New Connection stored in DB");
 
-            // ADD MONITORING FOR RECALLS
-            // TODO add recalls
+        } catch (SQLIntegrityConstraintViolationException dup){
+            System.out.println("Pre-existing Ip has Returned!");
         }
     }
 }

@@ -35,7 +35,6 @@ public class FileMonitor implements Runnable{
                 // Notify the console
                 System.out.println("Sending " + temp);
 
-                // Get the most availble holder
                 VideoUploader videoUploader = null;
 		String IP_location;
 		try {
