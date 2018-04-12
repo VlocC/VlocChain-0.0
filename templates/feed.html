@@ -5,7 +5,9 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+	<script type="text/javascript">
+		var directory = "/profile/".concat("{{current_user}}");
+	</script>
 	<script type="text/javascript">
 		$(document).ready(function() { 
 			$(".boxes").css({
@@ -36,6 +38,10 @@
 			$("#text").click(function() {
 					window.location.href = "/";
 			});
+			$("#profile").click(function() {
+				window.location.href = directory;
+			});
+
 		});
 		function watch_video(creator, title) {
 			var location = "/video/" + creator + "/" + title
@@ -116,14 +122,14 @@ img {
 <nav class="navbar navbar-light bg-light" id="navigate">
 	<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" href='#' id="text">VlocC</a>
+			<a class="nav-link" href='#' id="text">VlocC - {{current_user}}</a>
 		</li>
 	</ul>
 	<button class="btn btn-outline-primary navbar-btn" style="margin-right: 2%;" id="upload">Upload</button>
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">
-		<a class="dropdown-item" href='#'>My Profile</a>
+		<a class="dropdown-item" href='#' id="profile">My Profile</a>
 		<a class="dropdown-item" id="signout">Sign Out</a>
 	</ul>
 	</div>

@@ -102,13 +102,14 @@ def load_user(user_id):
 def feed():
     #vid_list = []
     vid_list = db.session.query(Video).order_by(desc(Video.id)).limit(9).all()
+    current_user = current_user.get_id()
     #for i in range(1, 10):
      #   vid_list = [db.session.query(Video).get(i)]
     # vids = vid.statement.execute().fetchall()
     #for video in vid:
     #    vid_list += [video]
     
-    return render_template('feed.html', vid_list=vid_list)
+    return render_template('feed.html', vid_list=vid_list, current_user=current_user)
     # return render_template('feed.html')
 
 """
@@ -229,7 +230,12 @@ def watch(user,video):
         fileExists = os.path.isfile("/home/vlocc/VlocChain"+video_path)
 
     return render_template('player.html', video_path=video_path)
-    
+
+@node.route('/profile/<user>', methods=['POST','GET'])
+def profile(user):
+    return render_template('user-account.html', user=user)
+
+
 @node.errorhandler(405) #bad url
 def method_not_allowed(error):
     return render_template('error.html') #send to login page
