@@ -1,6 +1,10 @@
 package Client;
 
+import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Owen Sullivan
@@ -26,10 +30,48 @@ public class Recall implements Runnable{
     /**
      * Called when the thread is started,
      * This actually sends the video back!
-     * TODO Write this and figure out the connection between this and web server
      */
     @Override
     public void run() {
 
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintStream printStream = new PrintStream(socket.getOutputStream());
+
+            // Notify the connection we are ready to do business!
+            printStream.println();
+            String file = bufferedReader.readLine();
+            printStream.println();
+            sendVideo(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    /**
+     * Sends the video to the given socket
+     * @throws IOException because of sending
+     */
+    private void sendVideo(String file) throws IOException {
+
+        System.out.println("Finding " + file);
+        byte[] data = null;
+        // Get the path
+        Path path = Paths.get(Holder.DOWNLOAD_DIRECTORY + file);
+        try {
+            // Read all the data
+            data = Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Create the output stream to send it through
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        // Simply write it to the socket
+        dataOutputStream.write(data);
+
+        // Delete the file, now that it is stored else where
+        dataOutputStream.close();
+        System.out.println("Sent the recalled video");
+    }
+
 }

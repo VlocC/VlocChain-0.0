@@ -68,7 +68,7 @@ public class VideoDownloader implements Runnable{
         System.out.println("Downloading " +fileName);
 
         // Create our output stream and write to the file
-        FileOutputStream fileOutputStream = new FileOutputStream("/home/multiojuice/VlocChain/Backend/nodeVideos/"+fileName);
+        FileOutputStream fileOutputStream = new FileOutputStream(Holder.DOWNLOAD_DIRECTORY+fileName);
         fileOutputStream.write(data);
         // Close and alert console
         fileOutputStream.close();
