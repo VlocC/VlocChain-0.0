@@ -24,18 +24,17 @@
 				'height': 
 				($(".thumbnail").width()/16*10 + 'px')
 			});
-			/*$(".thumbnail").each(function() {
-				$(this).html('<img src="test.jpg"><a>Title</a>');
-				// $(".thumbnail").css({
-				// 	'background-image':
-				// 	'test.jpg'
-				// });
-			});
-			*/
 			/*fun*/
 			$("#signout").click(function() {
 					window.location.href = "/logout";
 
+			});
+			$("#upload").click(function() {
+					window.location.href = "/upload";
+
+			});
+			$("#text").click(function() {
+					window.location.href = "/";
 			});
 		});
 		function watch_video(creator, title) {
@@ -51,8 +50,9 @@
 			background-attachment: fixed;
 			background-size: cover;
 			background-repeat: no-repeat;
-			background-color: rgb(36, 46, 62);
-			/*overflow: hidden;*/
+			background: -webkit-linear-gradient(left, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29);
+			background: -o-linear-gradient(left, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29);
+			background: linear-gradient(to right, #0f0c29, #1e1a4f, #1e1a4f, #0f0c29);
 		}
 		.window {
 	border-top:30px;
@@ -116,10 +116,10 @@ img {
 <nav class="navbar navbar-light bg-light" id="navigate">
 	<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" href="#">VlocC</a>
+			<a class="nav-link" href='#' id="text">VlocC</a>
 		</li>
 	</ul>
-
+	<button class="btn btn-outline-primary navbar-btn" style="margin-right: 2%;" id="upload">Upload</button>
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">

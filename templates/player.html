@@ -88,9 +88,16 @@
 				vid[0].currentTime = vid[0].duration * percentage / 100;
 			};
 			$("#signout").click(function() {
-                                        window.location.href = "/logout";
+                window.location.href = "/logout";
 
-                        }); 
+            });
+			$("#upload").click(function() {
+					window.location.href = "/upload";
+
+			});
+			$("#vlocc").click(function() {
+					window.location.href = "/";
+			});
 		});
 	</script>
 	<head>
@@ -253,9 +260,10 @@ img {
 <nav class="navbar navbar-light" style="background-color: none;" id="navigate">
 	<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" id="text" href="#">VlocC</a>
+			<a class="nav-link" href='#' id="text">VlocC</a>
 		</li>
 	</ul>
+	<button class="btn btn-outline-primary navbar-btn" style="margin-right: 2%;" id="upload">Upload</button>
 	<div class="dropdown my-sm-2">
 		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Account</button>
 	<ul class="dropdown-menu dropdown-menu-right text-left">
