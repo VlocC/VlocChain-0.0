@@ -12,40 +12,42 @@ The original idea was to be able to send videos from computer to computer as "To
 **Now**, our team is working to create a webpage that hosts videos for people to view, however we hope for it to not be like an ordinary video hosting website. VlocChain and it's videos will be distributed across several nodes, any computer that wants to be a node, and our page will pull it and host it there. The program will keep track of where every video is using ledgers like all blockchains do. Once a video hits a threshold of views, the Video will be created into a 'Vlocc', or the block object. This threshold will be like our proof of work. The benefit of this being a vlocc will mean that this video will be eligible for certain perks to come in the future!! We are still figuring out the ideas and how to do them, but you shall be updated soon!
 
 ##### Current Vision ~ Future Developments
-- Encrypt everything, so our users' videos will be safe.
-- Move everything into databases, rather then just keeping it in temporary memory (This will be implemented very soon).
-- Put up our webpage to start user testing.
 - Much more, but these are things to come in the very near future!
 
 ## What does each file do?
 
 #### Front End
-To be written..
+
 
 #### Back End
-##### controller.py
--[Link](/BackEnd/controller.py)
+##### The Controller
+-[Link](/BackEnd/)
 
 -Funcitonality
-  1. Takes files in *newVideos/* and distributes them to the known and connected nodes
-  2. Keeps track of nodes and keeps all ledgers up to date
-  3. Will turn videos to Vloccs and make sure that each nodes contents are updated to that
-  4. Ownership changes
+  1. Takes files in *newVideos/* and distributes them to the known and connected holders
+  2. Keeps track of nodes and keeps our map of videos up to date
+  3. Pulls the video back to the web client upon a web request for viewing
+
 - Misc 
-  1. Will be run on the main server, where the video files will be downloaded from the webpage
-  2. Will eventually not exist, the main server will also just be a **node**
+  1. This is ran side by side with the web server.
 
-##### node.py
-- [Link](/BackEnd/node.py)
+##### Holders
+- [Link](/BackEnd/)
 
-## Becoming a Node
+##### Tools
+- NGINX, used as our overarching web server.
+- uWSGI, to link our app to NGINX and tell it just how to do it.
+- Flask, the web framework that runs our app.
+- Java, what the Controller and Holders are written in.
+
+## Becoming a Holder
+Take a look at our becoming a holder page on the website! (To be implemented soon)
 
 #### What are the benefits?
-Well, right now, nothing. **However**, we plan to give a portion of the benefits given to the Vlocc owners to the nodes hosting these Vloccs. This way, there will be growing interest in becoming a node and hosting part of the VlocChain in the same rate that interest in making videos raise! This is what holds up our system and our ideas! More details will be availble in the future!
+Well, right now, nothing. **However**, we plan to give a portion of the benefits given to the Video owners to the holder that is hosting these Videos. This way, there will be growing interest in becoming a holder and hosting part of the VlocChain in the same rate that interest in making videos raise! This is what holds up our system and our ideas! More details will be availble in the future!
 
 #### Initialization
-1. Download or clone our repository to you local computer. Python3 must be installed to run our program.
-2. Run *python3 node.py*
-3. That is it.. for now, and actually right now, it won't even connect your node to the chain, because our server isn't up. However, stay tuned, because we will have the nodes actually recieve and send videos to the chain!
-4. **Future**, you will have to input max storage you are willing to lend to the VlocChain, along with how much traffic you are willing to take in at once and send at once. There will be minimums, but we have not decided these yet. :)
+1. Download or clone our Holder repository to your local computer. Java must be downloaded to run the program.
+2. Follow the step by step guide on that repository linked [here](). 
+3. **Future**, you will have to input max storage you are willing to lend to the VlocChain, along with how much traffic you are willing to take in at once and send at once. There will be minimums, but we have not decided these yet. :)
 
