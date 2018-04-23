@@ -12,13 +12,11 @@ from flask_uploads import UploadSet, configure_uploads
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from lxml import html
 from werkzeug.utils import secure_filename
-from video_class import Video
 import json
 import requests
 import hashlib as hasher
 import datetime as date
 import random
-import user_class
 import os
 import operator
 import hashlib
