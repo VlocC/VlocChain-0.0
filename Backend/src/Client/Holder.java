@@ -6,10 +6,8 @@ package Client;
  * that this is being ran on. Then send them up to the webpage upon request.
  */
 
-import Server.Controller;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -20,11 +18,14 @@ import java.net.Socket;
  */
 public class Holder {
 
+    public static final String NEW_VIDEO = "new_video";
+    public static final String RECALL = "recall";
+
     public static ServerSocket serverSocket;
-    public static final String DOWNLOAD_DIRECTORY = "/home/multiojuice/VlocChain/Backend/nodeVideos/";
+    public static String DOWNLOAD_DIRECTORY;
 
     public static void main(String[] args) throws IOException {
-
+        DOWNLOAD_DIRECTORY = System.getProperty("user.home") + File.separator + "VlocChain" + File.separator + "Backend" + File.separator + "nodeVideos" + File.separator;
         Socket ControllerConnection = new Socket("129.21.49.139",10000);
 
         // This is the socket that will always be listening for new commands!
@@ -40,14 +41,14 @@ public class Holder {
             // Depending oon the command, make a new thread to deal with the command
             switch (command) {
                 // If we need to download a new video to store
-                case Controller.NEW_VIDEO:
+                case NEW_VIDEO:
                     VideoDownloader videoDownloader = new VideoDownloader(socket);
                     Thread thread = new Thread(videoDownloader);
                     thread.start();
                     break;
 
                 // If we need to send a video back up to the webpage
-                case Controller.RECALL:
+                case RECALL:
                     Recall recall = new Recall(socket);
                     Thread thread1 = new Thread(recall);
                     thread1.start();
